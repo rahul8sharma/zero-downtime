@@ -16,6 +16,28 @@ class DashboardController < ApplicationController
     @projects = Project.all
   end
 
+  def incidents
+    @projects = Project.all
+    @incidents = Incident.includes(:project).recent
+
+    # Filter by severity if provided
+    if params[:severity].present? && params[:severity] != 'all'
+      @incidents = @incidents.where(severity: params[:severity])
+    end
+
+    # Filter by status if provided
+    if params[:status].present? && params[:status] != 'all'
+      @incidents = @incidents.where(status: params[:status])
+    end
+
+    # Search by title or error message
+    if params[:search].present?
+      @incidents = @incidents.where("title LIKE ? OR error_message LIKE ?",
+                                   "%#{params[:search]}%",
+                                   "%#{params[:search]}%")
+    end
+  end
+
   def analytics
     @projects = Project.all
   end

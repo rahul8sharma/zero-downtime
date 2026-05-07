@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   # Dashboard routes
   root 'dashboard#index'
   get 'dashboard/index'
+  get 'dashboard/incidents'
   get 'dashboard/logs_explorer'
   get 'dashboard/alert_rules'
   get 'dashboard/projects_page'
