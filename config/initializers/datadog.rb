@@ -16,18 +16,10 @@ Datadog.configure do |c|
   # Configure tracing for HTTP requests (Net::HTTP is included)
   c.tracing.instrument :http
 
-  # Enable error tracking
-  c.tracing.report_hostname = true
-
   # Agent configuration is done via environment variables:
   # DD_AGENT_HOST (defaults to 127.0.0.1)
   # DD_TRACE_AGENT_PORT (defaults to 8126)
 end
-
-# Configure error tracking
-Rails.application.config.middleware.use(
-  Datadog::Tracing::Contrib::Rails::ExceptionMiddleware
-)
 
 
 # Datadog.configure do |c|

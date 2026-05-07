@@ -12,7 +12,6 @@ class DashboardController < ApplicationController
   end
 
   def projects_page
-    dsdsadsd
     @projects = Project.all
   end
 
