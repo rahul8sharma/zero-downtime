@@ -1,0 +1,324 @@
+═══════════════════════════════════════════════════════════════
+   WHAT'S NEW - "HOW IT WORKS" GUIDE ADDED! 📖
+═══════════════════════════════════════════════════════════════
+
+🎉 NEW FEATURE: Interactive Guide Button
+
+We've added a comprehensive "How It Works" guide to help you
+and judges understand the complete AI DevOps workflow!
+
+═══════════════════════════════════════════════════════════════
+
+📍 WHERE TO FIND IT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Look at the top-right header:
+
+[🤖 AI DevOps Platform]  [📖 How It Works] [▶️ Start Demo] [🟢 Active]
+                          ← NEW BUTTON!
+
+Or press: Cmd/Ctrl + H
+
+
+📖 WHAT'S INSIDE THE GUIDE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+The guide includes:
+
+1. 🎯 OVERVIEW
+   - What the platform does
+   - Key results and metrics
+   - Why it matters
+
+2. 🔄 END-TO-END WORKFLOW (7 detailed steps)
+   ① Continuous Monitoring
+      - What systems are monitored
+      - What triggers detection
+      - Example: Batch job stuck
+
+   ② Automatic Ticket Creation
+      - ADO work item generation
+      - Tagging and linking
+      - Example: Creates AB#1618776
+
+   ③ AI Root Cause Analysis
+      - Code analysis process
+      - Git history checking
+      - Example: Finds Redis pool exhaustion at line 42
+
+   ④ Fix Generation
+      - How AI creates fixes
+      - Confidence scoring
+      - Example: Replace .all.each with .find_each
+
+   ⑤ Pull Request Creation
+      - Branch and PR creation
+      - Linking back to ticket
+      - Example: Creates PR #1234
+
+   ⑥ Team Assignment
+      - Availability checking
+      - Expertise matching
+      - Example: Assigns to Rahul Sharma
+
+   ⑦ Notification
+      - Teams message sending
+      - One-click review links
+      - Example: "🤖 AI fixed AB#1618776"
+
+3. 🔗 SYSTEM INTEGRATIONS
+   Visual cards showing:
+   - GitHub (repos, PRs, tests)
+   - Azure DevOps (tickets, sprints)
+   - Observability (Datadog, Rollbar)
+   - Microsoft Teams (notifications)
+
+4. 🛡️ SAFETY MECHANISMS
+   - Confidence scoring (80% threshold)
+   - Automated testing (must pass)
+   - Human review gates (no auto-merge)
+   - Full audit trail (every action logged)
+
+5. 📈 MEASURABLE IMPACT
+   Visual metrics:
+   - 90% faster resolution
+   - 67% auto-fix rate
+   - $117K annual savings
+   - 82% proactive detection
+
+6. 🎬 REAL-WORLD EXAMPLE
+   Complete timeline showing:
+   - 00:00 - Issue occurs
+   - 00:05 - Detection
+   - 00:08 - Ticket created
+   - 00:10 - AI analysis
+   - 00:18 - Fix generated
+   - 00:23 - PR created
+   - 00:28 - Assignment
+   - 00:30 - Notification sent
+   ✅ Total: 30 seconds!
+
+7. 🚀 CALL TO ACTION
+   Big button: "Launch Live Demo"
+
+
+═══════════════════════════════════════════════════════════════
+
+💡 WHY THIS HELPS YOUR PRESENTATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✓ Educates judges before the demo
+   "Let me show you how this works..." [opens guide]
+
+✓ Answers "How does it work?" questions
+   Point to the guide instead of explaining verbally
+
+✓ Shows completeness of your thinking
+   You've documented the entire workflow in detail
+
+✓ Professional polish
+   Demonstrates production-ready documentation
+
+✓ Backup if demo breaks
+   Can walk through the guide if tech fails
+
+
+═══════════════════════════════════════════════════════════════
+
+🎤 HOW TO USE IT IN YOUR PRESENTATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+OPTION 1: Start with the Guide
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+"Before I show you the live demo, let me quickly walk you
+through how this works..."
+
+[Open guide, scroll through workflow steps]
+
+"Now watch it happen in real-time..."
+
+[Close guide, start demo]
+
+
+OPTION 2: Reference During Demo
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[Demo completes]
+
+Judge: "How does the AI know which developer to assign?"
+
+"Great question! Let me show you..."
+
+[Open guide, scroll to step 6: Team Assignment]
+
+"Here's the algorithm..."
+
+
+OPTION 3: Backup if Demo Breaks
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[Demo button not working]
+
+"No problem, let me walk you through what would happen..."
+
+[Open guide, narrate through each step]
+
+
+OPTION 4: End with Guide
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[After impressive demo]
+
+"And if you want to dig deeper into how any of this works,
+we've documented the entire workflow..."
+
+[Quick scroll through guide]
+
+"Everything from detection to notification, all automated."
+
+
+═══════════════════════════════════════════════════════════════
+
+⚡ KEYBOARD SHORTCUTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Cmd/Ctrl + H  →  Open guide
+Esc           →  Close guide
+Cmd/Ctrl + D  →  Start demo (from guide CTA button)
+
+
+═══════════════════════════════════════════════════════════════
+
+🎨 VISUAL DESIGN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+The guide features:
+
+✓ Clean, scrollable layout
+✓ Numbered workflow steps with icons
+✓ Visual integration cards
+✓ Safety mechanism callouts
+✓ Impact metrics grid
+✓ Real-world timeline example
+✓ Big CTA button at the end
+✓ Professional color-coded sections
+✓ Easy-to-read typography
+✓ Mobile-responsive design
+
+
+═══════════════════════════════════════════════════════════════
+
+📊 CONTENT BREAKDOWN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Total Sections:     7
+Workflow Steps:     7 (detailed)
+Integration Cards:  4 (GitHub, ADO, Observability, Teams)
+Safety Features:    4 (Confidence, Testing, Review, Audit)
+Impact Metrics:     4 (MTTR, Auto-fix, Savings, Detection)
+Timeline Events:    9 (00:00 to 00:30)
+
+Total Content:      ~2,000 words
+Reading Time:       5-7 minutes (full read)
+Demo Time:          30 seconds (if using CTA button)
+
+
+═══════════════════════════════════════════════════════════════
+
+🏆 COMPETITIVE ADVANTAGE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Most hackathon projects just have:
+  ❌ A demo (you have this too)
+  ❌ Maybe some slides (you have better)
+
+YOU also have:
+  ✅ Interactive working demo
+  ✅ Professional dashboard UI
+  ✅ Complete workflow documentation
+  ✅ Built-in user guide
+  ✅ Real-world examples
+  ✅ Safety documentation
+  ✅ Measurable impact metrics
+
+This level of completeness shows:
+  → Production-ready thinking
+  → Professional documentation
+  → Attention to detail
+  → User-centric design
+
+
+═══════════════════════════════════════════════════════════════
+
+✨ WHAT JUDGES WILL THINK
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+"Wow, they've thought through the entire workflow."
+"This documentation is production-ready."
+"I can actually understand how this works."
+"They've addressed safety concerns proactively."
+"This could ship to customers tomorrow."
+"The attention to detail is impressive."
+
+
+═══════════════════════════════════════════════════════════════
+
+🎯 PRO TIPS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Practice opening the guide smoothly
+   (Cmd/Ctrl+H is faster than clicking)
+
+2. Know which section answers which question
+   - "How does AI analyze?" → Step 3
+   - "Is it safe?" → Safety Mechanisms
+   - "What's the ROI?" → Impact Metrics
+   - "Show me an example?" → Real-World Example
+
+3. Use the guide to handle objections
+   Judge: "What if the fix is wrong?"
+   You: [Opens guide, shows Safety section]
+
+4. The guide IS your backup presentation
+   If demo breaks, narrate through the guide
+
+5. End on the CTA button
+   "And here's where you click to see it live..."
+   [Clicks "Launch Live Demo" from guide]
+
+
+═══════════════════════════════════════════════════════════════
+
+📝 UPDATED FILES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✓ index.html      - Added guide button + modal (now 35KB)
+✓ styles.css      - Added guide styling (now 22KB)
+✓ app.js          - Added guide functions (now 20KB)
+✓ README.md       - Updated with guide info
+✓ QUICK_START.txt - Updated shortcuts
+
+
+═══════════════════════════════════════════════════════════════
+
+🚀 YOU'RE NOW EVEN MORE READY!
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Your demo now has:
+  ✅ Professional dashboard
+  ✅ Working live demo
+  ✅ 6 sample incidents
+  ✅ Team status display
+  ✅ Integration showcase
+  ✅ Activity feed
+  ✅ Comprehensive guide ← NEW!
+
+Open index.html and click "How It Works" to see it!
+
+
+═══════════════════════════════════════════════════════════════
+
+GO WIN THIS THING! 🏆✨
+
+═══════════════════════════════════════════════════════════════

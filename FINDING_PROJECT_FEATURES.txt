@@ -1,0 +1,101 @@
+═══════════════════════════════════════════════════════════════
+   HOW TO ACCESS PROJECT MANAGEMENT FEATURES
+═══════════════════════════════════════════════════════════════
+
+🎯 STEP-BY-STEP GUIDE TO CONNECT ADO, GITHUB & OBSERVABILITY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📍 STEP 1: OPEN THE PROJECTS TAB
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Open: index.html in your browser
+2. Look at the navigation tabs (below the header)
+3. Click: "📁 Projects" tab (third tab)
+
+Navigation tabs:
+[📊 Dashboard] [🔥 Live Incidents] [📁 Projects] ← CLICK HERE!
+
+
+📍 STEP 2: CREATE NEW PROJECT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+You should now see:
+- "Project Management" heading
+- "➕ Create New Project" button (top-right)
+- Grid of existing projects below
+
+Click: "➕ Create New Project" button
+
+
+📍 STEP 3: CONFIGURE PROJECT (MODAL OPENS)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+A large modal window will open with 5 sections:
+
+┌─────────────────────────────────────────────────────┐
+│  ➕ Create New Project                        [×]   │
+├─────────────────────────────────────────────────────┤
+│                                                     │
+│  📋 PROJECT INFORMATION                             │
+│  ─────────────────────────────────────────────     │
+│  Project Name: [________________]                   │
+│  Description:  [________________]                   │
+│                                                     │
+│  📋 AZURE DEVOPS BOARDS                             │
+│  ─────────────────────────────────────────────     │
+│  Organization URL: [________________]               │
+│  Project Name:     [________________]               │
+│  Board Name:       [________________]               │
+│  [➕ Add Another ADO Board]                         │
+│                                                     │
+│  📦 GITHUB REPOSITORIES                             │
+│  ─────────────────────────────────────────────     │
+│  Repository Owner: [________________]               │
+│  Repository Name:  [________________]               │
+│  Branch to Monitor:[________________]               │
+│  [➕ Add Another Repository]                        │
+│                                                     │
+│  📊 OBSERVABILITY PLATFORMS                         │
+│  ─────────────────────────────────────────────     │
+│  ☐ 📊 Datadog                                       │
+│  ☐ 🐛 Rollbar                                       │
+│  ☐ 📈 New Relic                                     │
+│  ☐ 🔍 Sentry                                        │
+│                                                     │
+│  💬 MICROSOFT TEAMS NOTIFICATIONS                   │
+│  ─────────────────────────────────────────────     │
+│  Webhook URL: [________________]                    │
+│  Channel:     [________________]                    │
+│                                                     │
+│  [Cancel]  [Save Project]                          │
+└─────────────────────────────────────────────────────┘
+
+
+📍 STEP 4: VIEW EXISTING PROJECT CONFIG
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Alternative way to see configurations:
+
+1. Go to "📁 Projects" tab
+2. Click on any project card (e.g., "GRC Spend Management")
+3. Configuration modal opens showing all connected services
+
+
+═══════════════════════════════════════════════════════════════
+
+🚨 TROUBLESHOOTING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Problem: Don't see "Projects" tab
+Fix: Make sure you opened index.html (not an old version)
+
+Problem: Projects tab is empty
+Fix: Click "Create New Project" button to add your first project
+
+Problem: Modal doesn't open
+Fix: Check browser console (F12) for errors
+
+Problem: Can't see observability checkboxes
+Fix: Scroll down in the modal - it's a long form
+
+═══════════════════════════════════════════════════════════════

@@ -1,0 +1,1926 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <%= image_tag "symplr-logo.svg", alt: "symplr", class: "logo-img" %>
+                <div class="logo-divider"></div>
+                <div class="logo-text">
+                    <h1>Zero Downtime</h1>
+                    <p>AI-Powered DevOps Automation Platform</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <div class="project-selector">
+                    <label for="project-select">Project:</label>
+                    <select id="project-select" onchange="switchProject(this.value)">
+                        <option value="all">All Projects</option>
+                        <option value="grc-spend" selected>GRC Spend Management</option>
+                        <option value="workforce">Workforce Solutions</option>
+                        <option value="provider">Provider Platform</option>
+                    </select>
+                    <button class="btn btn-icon-only" onclick="openProjectManager()" title="Manage Projects">
+                        <span>⚙️</span>
+                    </button>
+                </div>
+                <button class="btn btn-secondary" onclick="openGuide()">
+                    <span class="btn-icon">📖</span>
+                    How It Works
+                </button>
+                <button class="btn btn-primary" onclick="startDemo()">
+                    <span class="btn-icon">▶️</span>
+                    Start Live Demo
+                </button>
+                <div class="status-indicator">
+                    <span class="status-dot pulse"></span>
+                    <span>Monitoring Active</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+        <button class="sidebar-toggle" onclick="toggleSidebar()">
+            <span>☰</span>
+        </button>
+        <nav class="sidebar-nav">
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">MAIN</div>
+                <a href="#" class="sidebar-item active" onclick="switchTab('dashboard')">
+                    <span class="sidebar-icon">📊</span>
+                    <span class="sidebar-label">Dashboard</span>
+                </a>
+                <a href="#" class="sidebar-item" onclick="switchTab('incidents')">
+                    <span class="sidebar-icon">🔥</span>
+                    <span class="sidebar-label">Live Incidents</span>
+                    <span class="sidebar-badge">6</span>
+                </a>
+                <a href="#" class="sidebar-item" onclick="switchTab('analytics')">
+                    <span class="sidebar-icon">📈</span>
+                    <span class="sidebar-label">Analytics</span>
+                </a>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">MANAGEMENT</div>
+                <a href="#" class="sidebar-item" onclick="switchTab('projects')">
+                    <span class="sidebar-icon">📁</span>
+                    <span class="sidebar-label">Projects</span>
+                </a>
+                <a href="#" class="sidebar-item" onclick="switchTab('integrations')">
+                    <span class="sidebar-icon">🔗</span>
+                    <span class="sidebar-label">Integrations</span>
+                </a>
+                <a href="#" class="sidebar-item" onclick="switchTab('team')">
+                    <span class="sidebar-icon">👥</span>
+                    <span class="sidebar-label">Team</span>
+                </a>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">MONITORING</div>
+                <a href="#" class="sidebar-item" onclick="switchTab('activity')">
+                    <span class="sidebar-icon">📝</span>
+                    <span class="sidebar-label">Activity Log</span>
+                </a>
+                <a href="#" class="sidebar-item" onclick="switchTab('logs-explorer')">
+                    <span class="sidebar-icon">🔍</span>
+                    <span class="sidebar-label">Logs Explorer</span>
+                </a>
+                <a href="#" class="sidebar-item" onclick="switchTab('alerts')">
+                    <span class="sidebar-icon">🔔</span>
+                    <span class="sidebar-label">Alerts</span>
+                </a>
+                <a href="#" class="sidebar-item" onclick="switchTab('alert-rules')">
+                    <span class="sidebar-icon">📋</span>
+                    <span class="sidebar-label">Alert Rules</span>
+                </a>
+                <a href="#" class="sidebar-item" onclick="switchTab('reports')">
+                    <span class="sidebar-icon">📄</span>
+                    <span class="sidebar-label">Reports</span>
+                </a>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">SETTINGS</div>
+                <a href="#" class="sidebar-item" onclick="switchTab('settings')">
+                    <span class="sidebar-icon">⚙️</span>
+                    <span class="sidebar-label">Settings</span>
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="main-content">
+        <!-- Dashboard Tab -->
+        <div class="tab-content active" id="dashboard-tab">
+            <!-- Key Metrics -->
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-icon">⚡</span>
+                        <span class="metric-label">MTTR</span>
+                    </div>
+                    <div class="metric-value">15 min</div>
+                    <div class="metric-change positive">↓ 90% vs manual (2-4 hrs)</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-icon">🎯</span>
+                        <span class="metric-label">Auto-Fixed Today</span>
+                    </div>
+                    <div class="metric-value">12 / 18</div>
+                    <div class="metric-change positive">67% success rate</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-icon">💰</span>
+                        <span class="metric-label">Cost Savings</span>
+                    </div>
+                    <div class="metric-value">$117K</div>
+                    <div class="metric-change positive">per year</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-icon">👥</span>
+                        <span class="metric-label">Available Devs</span>
+                    </div>
+                    <div class="metric-value">3 / 8</div>
+                    <div class="metric-change neutral">37% capacity</div>
+                </div>
+            </div>
+
+            <!-- Main Dashboard Grid -->
+            <div class="dashboard-grid">
+                <!-- Recent Incidents -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2>🔥 Active Incidents</h2>
+                        <span class="badge badge-critical">3 Critical</span>
+                    </div>
+                    <div class="panel-content" id="dashboard-incidents">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- AI Analysis -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2>🧠 AI Analysis Pipeline</h2>
+                    </div>
+                    <div class="panel-content">
+                        <div class="pipeline-stage">
+                            <div class="stage-indicator active"></div>
+                            <div class="stage-content">
+                                <h4>1. Issue Detection</h4>
+                                <p>Monitoring logs, errors, performance metrics</p>
+                                <span class="stage-status">✅ Active</span>
+                            </div>
+                        </div>
+                        <div class="pipeline-stage">
+                            <div class="stage-indicator active"></div>
+                            <div class="stage-content">
+                                <h4>2. AI Diagnosis</h4>
+                                <p>Analyzing code, commits, and context</p>
+                                <span class="stage-status">⏳ Processing</span>
+                            </div>
+                        </div>
+                        <div class="pipeline-stage">
+                            <div class="stage-indicator"></div>
+                            <div class="stage-content">
+                                <h4>3. Auto-Fix Generation</h4>
+                                <p>Creating PR with fix code</p>
+                                <span class="stage-status">⏸️ Waiting</span>
+                            </div>
+                        </div>
+                        <div class="pipeline-stage">
+                            <div class="stage-indicator"></div>
+                            <div class="stage-content">
+                                <h4>4. Team Assignment</h4>
+                                <p>Finding available developer for review</p>
+                                <span class="stage-status">⏸️ Waiting</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Integration Status -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2>🔗 Connected Systems</h2>
+                    </div>
+                    <div class="panel-content">
+                        <div class="integration-item">
+                            <span class="integration-icon">📦</span>
+                            <div class="integration-info">
+                                <strong>GitHub</strong>
+                                <span>5 repositories monitored</span>
+                            </div>
+                            <span class="status-badge success">Connected</span>
+                        </div>
+                        <div class="integration-item">
+                            <span class="integration-icon">📋</span>
+                            <div class="integration-info">
+                                <strong>Azure DevOps</strong>
+                                <span>3 projects synced</span>
+                            </div>
+                            <span class="status-badge success">Connected</span>
+                        </div>
+                        <div class="integration-item">
+                            <span class="integration-icon">📊</span>
+                            <div class="integration-info">
+                                <strong>Datadog</strong>
+                                <span>Real-time metrics</span>
+                            </div>
+                            <span class="status-badge success">Connected</span>
+                        </div>
+                        <div class="integration-item">
+                            <span class="integration-icon">🐛</span>
+                            <div class="integration-info">
+                                <strong>Rollbar</strong>
+                                <span>Error tracking</span>
+                            </div>
+                            <span class="status-badge success">Connected</span>
+                        </div>
+                        <div class="integration-item">
+                            <span class="integration-icon">💬</span>
+                            <div class="integration-info">
+                                <strong>Microsoft Teams</strong>
+                                <span>Notifications enabled</span>
+                            </div>
+                            <span class="status-badge success">Connected</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Incidents Tab -->
+        <div class="tab-content" id="incidents-tab">
+            <div class="incidents-header">
+                <div class="filters">
+                    <button class="filter-btn active" onclick="filterIncidents('all')">All (18)</button>
+                    <button class="filter-btn" onclick="filterIncidents('critical')">Critical (3)</button>
+                    <button class="filter-btn" onclick="filterIncidents('analyzing')">Analyzing (5)</button>
+                    <button class="filter-btn" onclick="filterIncidents('fixed')">Fixed (10)</button>
+                </div>
+                <input type="text" class="search-input" placeholder="Search incidents..." onkeyup="searchIncidents(this.value)">
+            </div>
+            <div class="incidents-list" id="incidents-list">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
+        <!-- Integrations Tab -->
+        <div class="tab-content" id="integrations-tab">
+            <div class="integrations-grid">
+                <div class="integration-card">
+                    <div class="integration-card-header">
+                        <span class="integration-logo">📦</span>
+                        <h3>GitHub</h3>
+                        <span class="status-badge success">Connected</span>
+                    </div>
+                    <div class="integration-card-body">
+                        <div class="integration-stat">
+                            <span class="stat-label">Repositories</span>
+                            <span class="stat-value">5</span>
+                        </div>
+                        <div class="integration-stat">
+                            <span class="stat-label">PRs Created</span>
+                            <span class="stat-value">47</span>
+                        </div>
+                        <div class="integration-stat">
+                            <span class="stat-label">PRs Merged</span>
+                            <span class="stat-value">42</span>
+                        </div>
+                        <ul class="repo-list">
+                            <li>symplr/grc-spend-greenlight</li>
+                            <li>symplr/workforce-backend</li>
+                            <li>symplr/api-gateway</li>
+                            <li>symplr/mobile-app</li>
+                            <li>symplr/data-pipeline</li>
+                        </ul>
+                    </div>
+                    <div class="integration-card-footer">
+                        <button class="btn btn-secondary btn-sm">Configure</button>
+                    </div>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-card-header">
+                        <span class="integration-logo">📋</span>
+                        <h3>Azure DevOps</h3>
+                        <span class="status-badge success">Connected</span>
+                    </div>
+                    <div class="integration-card-body">
+                        <div class="integration-stat">
+                            <span class="stat-label">Projects</span>
+                            <span class="stat-value">3</span>
+                        </div>
+                        <div class="integration-stat">
+                            <span class="stat-label">Tickets Created</span>
+                            <span class="stat-value">128</span>
+                        </div>
+                        <div class="integration-stat">
+                            <span class="stat-label">Auto-Closed</span>
+                            <span class="stat-value">86</span>
+                        </div>
+                        <ul class="repo-list">
+                            <li>GRC Spend Management</li>
+                            <li>Workforce Solutions</li>
+                            <li>Provider Platform</li>
+                        </ul>
+                    </div>
+                    <div class="integration-card-footer">
+                        <button class="btn btn-secondary btn-sm">Configure</button>
+                    </div>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-card-header">
+                        <span class="integration-logo">📊</span>
+                        <h3>Observability</h3>
+                        <span class="status-badge success">Connected</span>
+                    </div>
+                    <div class="integration-card-body">
+                        <div class="integration-stat">
+                            <span class="stat-label">Datadog</span>
+                            <span class="stat-value">✓</span>
+                        </div>
+                        <div class="integration-stat">
+                            <span class="stat-label">AWS CloudWatch</span>
+                            <span class="stat-value">✓</span>
+                        </div>
+                        <div class="integration-stat">
+                            <span class="stat-label">Rollbar</span>
+                            <span class="stat-value">✓</span>
+                        </div>
+                        <div class="integration-stat">
+                            <span class="stat-label">New Relic</span>
+                            <span class="stat-value">✓</span>
+                        </div>
+                        <div class="integration-stat">
+                            <span class="stat-label">Sentry</span>
+                            <span class="stat-value">✓</span>
+                        </div>
+                        <p class="integration-description">
+                            Real-time monitoring of errors, logs, and performance metrics across all environments.
+                        </p>
+                    </div>
+                    <div class="integration-card-footer">
+                        <button class="btn btn-secondary btn-sm">Configure</button>
+                    </div>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-card-header">
+                        <span class="integration-logo">💬</span>
+                        <h3>Microsoft Teams</h3>
+                        <span class="status-badge success">Connected</span>
+                    </div>
+                    <div class="integration-card-body">
+                        <div class="integration-stat">
+                            <span class="stat-label">Channels</span>
+                            <span class="stat-value">8</span>
+                        </div>
+                        <div class="integration-stat">
+                            <span class="stat-label">Notifications Sent</span>
+                            <span class="stat-value">342</span>
+                        </div>
+                        <div class="integration-stat">
+                            <span class="stat-label">Response Rate</span>
+                            <span class="stat-value">94%</span>
+                        </div>
+                        <p class="integration-description">
+                            Automatic PR review requests and incident notifications sent to developers.
+                        </p>
+                    </div>
+                    <div class="integration-card-footer">
+                        <button class="btn btn-secondary btn-sm">Configure</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Projects Tab -->
+        <div class="tab-content" id="projects-tab">
+            <div class="projects-header">
+                <h2>Project Management</h2>
+                <button class="btn btn-primary" onclick="openCreateProject()">
+                    <span class="btn-icon">➕</span>
+                    Create New Project
+                </button>
+            </div>
+
+            <div class="projects-list" id="projects-list">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
+        <!-- Team Tab -->
+        <div class="tab-content" id="team-tab">
+            <div class="team-grid">
+                <div class="team-member available">
+                    <div class="member-avatar">RS</div>
+                    <div class="member-info">
+                        <h4>Rahul Sharma</h4>
+                        <p>Senior Developer</p>
+                        <span class="availability-badge available">Available</span>
+                    </div>
+                    <div class="member-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">PRs Reviewed</span>
+                            <span class="stat-value">8</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Avg Response</span>
+                            <span class="stat-value">2.3h</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-member busy">
+                    <div class="member-avatar">SK</div>
+                    <div class="member-info">
+                        <h4>Sarah Kim</h4>
+                        <p>Lead Engineer</p>
+                        <span class="availability-badge busy">In Meeting</span>
+                    </div>
+                    <div class="member-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">PRs Reviewed</span>
+                            <span class="stat-value">15</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Avg Response</span>
+                            <span class="stat-value">1.5h</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-member available">
+                    <div class="member-avatar">MP</div>
+                    <div class="member-info">
+                        <h4>Michael Patel</h4>
+                        <p>Senior Developer</p>
+                        <span class="availability-badge available">Available</span>
+                    </div>
+                    <div class="member-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">PRs Reviewed</span>
+                            <span class="stat-value">12</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Avg Response</span>
+                            <span class="stat-value">3.1h</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-member busy">
+                    <div class="member-avatar">LW</div>
+                    <div class="member-info">
+                        <h4>Lisa Wang</h4>
+                        <p>DevOps Engineer</p>
+                        <span class="availability-badge busy">Deep Work</span>
+                    </div>
+                    <div class="member-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">PRs Reviewed</span>
+                            <span class="stat-value">6</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Avg Response</span>
+                            <span class="stat-value">4.2h</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-member available">
+                    <div class="member-avatar">JC</div>
+                    <div class="member-info">
+                        <h4>James Chen</h4>
+                        <p>Full Stack Developer</p>
+                        <span class="availability-badge available">Available</span>
+                    </div>
+                    <div class="member-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">PRs Reviewed</span>
+                            <span class="stat-value">9</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Avg Response</span>
+                            <span class="stat-value">2.8h</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-member offline">
+                    <div class="member-avatar">AR</div>
+                    <div class="member-info">
+                        <h4>Anna Rodriguez</h4>
+                        <p>Backend Developer</p>
+                        <span class="availability-badge offline">Offline</span>
+                    </div>
+                    <div class="member-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">PRs Reviewed</span>
+                            <span class="stat-value">11</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Avg Response</span>
+                            <span class="stat-value">2.1h</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-member busy">
+                    <div class="member-avatar">DM</div>
+                    <div class="member-info">
+                        <h4>David Miller</h4>
+                        <p>Senior Engineer</p>
+                        <span class="availability-badge busy">On Call</span>
+                    </div>
+                    <div class="member-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">PRs Reviewed</span>
+                            <span class="stat-value">14</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Avg Response</span>
+                            <span class="stat-value">1.9h</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-member offline">
+                    <div class="member-avatar">ET</div>
+                    <div class="member-info">
+                        <h4>Emily Taylor</h4>
+                        <p>Frontend Developer</p>
+                        <span class="availability-badge offline">PTO</span>
+                    </div>
+                    <div class="member-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">PRs Reviewed</span>
+                            <span class="stat-value">7</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Avg Response</span>
+                            <span class="stat-value">3.5h</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activity Tab -->
+        <div class="tab-content" id="activity-tab">
+            <div class="activity-feed" id="activity-feed">
+                <div class="activity-item">
+                    <span class="activity-time">Just now</span>
+                    <span class="activity-icon">🟢</span>
+                    <span class="activity-text">System initialized and monitoring started</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytics Tab -->
+        <div class="tab-content" id="analytics-tab">
+            <h2 class="section-title">📈 Analytics & Insights</h2>
+
+            <div class="analytics-grid">
+                <div class="analytics-card">
+                    <h3>Incident Trends (Last 30 Days)</h3>
+                    <div class="chart-placeholder">
+                        <div class="trend-line">
+                            <div class="trend-bar" style="height: 60%"></div>
+                            <div class="trend-bar" style="height: 45%"></div>
+                            <div class="trend-bar" style="height: 70%"></div>
+                            <div class="trend-bar" style="height: 40%"></div>
+                            <div class="trend-bar" style="height: 55%"></div>
+                            <div class="trend-bar" style="height: 30%"></div>
+                            <div class="trend-bar" style="height: 25%"></div>
+                        </div>
+                        <div class="chart-label">↓ 58% reduction in incidents</div>
+                    </div>
+                </div>
+
+                <div class="analytics-card">
+                    <h3>Auto-Fix Success Rate</h3>
+                    <div class="chart-placeholder">
+                        <div class="donut-chart">
+                            <div class="donut-center">
+                                <div class="donut-value">67%</div>
+                                <div class="donut-label">Success</div>
+                            </div>
+                        </div>
+                        <div class="chart-stats">
+                            <div class="chart-stat">
+                                <span class="stat-dot success"></span>
+                                <span>Fixed: 148</span>
+                            </div>
+                            <div class="chart-stat">
+                                <span class="stat-dot warning"></span>
+                                <span>Manual: 73</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="analytics-card">
+                    <h3>Top Issue Categories</h3>
+                    <div class="category-list">
+                        <div class="category-item">
+                            <div class="category-header">
+                                <span>Database Performance</span>
+                                <span class="category-count">45</span>
+                            </div>
+                            <div class="category-bar">
+                                <div class="category-fill" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div class="category-item">
+                            <div class="category-header">
+                                <span>API Timeouts</span>
+                                <span class="category-count">32</span>
+                            </div>
+                            <div class="category-bar">
+                                <div class="category-fill" style="width: 60%"></div>
+                            </div>
+                        </div>
+                        <div class="category-item">
+                            <div class="category-header">
+                                <span>Memory Leaks</span>
+                                <span class="category-count">18</span>
+                            </div>
+                            <div class="category-bar">
+                                <div class="category-fill" style="width: 35%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="analytics-card">
+                    <h3>Team Performance</h3>
+                    <div class="performance-list">
+                        <div class="performance-item">
+                            <div class="member-avatar small">RS</div>
+                            <div class="performance-details">
+                                <div class="performance-name">Rahul Sharma</div>
+                                <div class="performance-metric">23 incidents resolved</div>
+                            </div>
+                            <div class="performance-score">⭐ 4.8</div>
+                        </div>
+                        <div class="performance-item">
+                            <div class="member-avatar small">DM</div>
+                            <div class="performance-details">
+                                <div class="performance-name">David Miller</div>
+                                <div class="performance-metric">19 incidents resolved</div>
+                            </div>
+                            <div class="performance-score">⭐ 4.6</div>
+                        </div>
+                        <div class="performance-item">
+                            <div class="member-avatar small">ET</div>
+                            <div class="performance-details">
+                                <div class="performance-name">Emily Taylor</div>
+                                <div class="performance-metric">15 incidents resolved</div>
+                            </div>
+                            <div class="performance-score">⭐ 4.7</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alerts Tab -->
+        <div class="tab-content" id="alerts-tab">
+            <h2 class="section-title">🔔 Real-Time Alerts</h2>
+
+            <div class="alerts-list">
+                <div class="alert-item critical">
+                    <div class="alert-icon">🚨</div>
+                    <div class="alert-content">
+                        <div class="alert-header">
+                            <h4>Critical: API Response Time Spike</h4>
+                            <span class="alert-time">2 min ago</span>
+                        </div>
+                        <p>Average response time increased to 3.2s (threshold: 1s)</p>
+                        <div class="alert-actions">
+                            <button class="btn btn-sm btn-primary">Investigate</button>
+                            <button class="btn btn-sm btn-secondary">Acknowledge</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert-item warning">
+                    <div class="alert-icon">⚠️</div>
+                    <div class="alert-content">
+                        <div class="alert-header">
+                            <h4>Warning: High Memory Usage</h4>
+                            <span class="alert-time">15 min ago</span>
+                        </div>
+                        <p>Memory usage at 82% on production server prod-app-03</p>
+                        <div class="alert-actions">
+                            <button class="btn btn-sm btn-primary">View Details</button>
+                            <button class="btn btn-sm btn-secondary">Snooze</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert-item info">
+                    <div class="alert-icon">ℹ️</div>
+                    <div class="alert-content">
+                        <div class="alert-header">
+                            <h4>Info: Deployment Completed</h4>
+                            <span class="alert-time">1 hour ago</span>
+                        </div>
+                        <p>Version 2.4.1 deployed to production successfully</p>
+                        <div class="alert-actions">
+                            <button class="btn btn-sm btn-secondary">View Logs</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reports Tab -->
+        <div class="tab-content" id="reports-tab">
+            <h2 class="section-title">📄 Reports & Exports</h2>
+
+            <div class="reports-grid">
+                <div class="report-card">
+                    <div class="report-icon">📊</div>
+                    <h3>Monthly Summary Report</h3>
+                    <p>Comprehensive overview of incidents, fixes, and team performance</p>
+                    <div class="report-meta">
+                        <span>Last generated: Today</span>
+                    </div>
+                    <button class="btn btn-primary btn-block">Generate Report</button>
+                </div>
+
+                <div class="report-card">
+                    <div class="report-icon">💰</div>
+                    <h3>Cost Savings Report</h3>
+                    <p>Detailed breakdown of time and cost savings from automation</p>
+                    <div class="report-meta">
+                        <span>Last generated: 2 days ago</span>
+                    </div>
+                    <button class="btn btn-primary btn-block">Generate Report</button>
+                </div>
+
+                <div class="report-card">
+                    <div class="report-icon">🎯</div>
+                    <h3>Performance Metrics</h3>
+                    <p>MTTR, success rates, and SLA compliance metrics</p>
+                    <div class="report-meta">
+                        <span>Last generated: 1 week ago</span>
+                    </div>
+                    <button class="btn btn-primary btn-block">Generate Report</button>
+                </div>
+
+                <div class="report-card">
+                    <div class="report-icon">📈</div>
+                    <h3>Trend Analysis</h3>
+                    <p>Historical trends and predictive insights</p>
+                    <div class="report-meta">
+                        <span>Last generated: 3 days ago</span>
+                    </div>
+                    <button class="btn btn-primary btn-block">Generate Report</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logs Explorer Tab -->
+        <div class="tab-content" id="logs-explorer-tab">
+            <h2 class="section-title">🔍 Logs Explorer</h2>
+
+            <!-- Query Builder -->
+            <div class="logs-query-builder">
+                <div class="query-builder-header">
+                    <h3>Query Configuration</h3>
+                </div>
+                <form id="logs-query-form" onsubmit="searchLogs(event)">
+                    <div class="query-builder-grid">
+                        <div class="form-group">
+                            <label for="log-platform">Observability Platform *</label>
+                            <select id="log-platform" required>
+                                <option value="datadog">📊 Datadog</option>
+                                <option value="cloudwatch">☁️ AWS CloudWatch</option>
+                                <option value="rollbar">🐛 Rollbar</option>
+                                <option value="newrelic">📈 New Relic</option>
+                                <option value="sentry">🔍 Sentry</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="log-project">Project *</label>
+                            <select id="log-project" required>
+                                <option value="grc-spend">GRC Spend Management</option>
+                                <option value="workforce">Workforce Solutions</option>
+                                <option value="provider">Provider Platform</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="log-severity">Severity Level</label>
+                            <select id="log-severity">
+                                <option value="all">All Levels</option>
+                                <option value="critical">Critical</option>
+                                <option value="error">Error</option>
+                                <option value="warning">Warning</option>
+                                <option value="info">Info</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="log-start-time">Start Time *</label>
+                            <input type="datetime-local" id="log-start-time" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="log-end-time">End Time *</label>
+                            <input type="datetime-local" id="log-end-time" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="log-search">Search Query</label>
+                            <input type="text" id="log-search" placeholder="e.g., service:api status:error">
+                        </div>
+                    </div>
+
+                    <div class="query-builder-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <span>🔍</span> Search Logs
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="resetLogsQuery()">
+                            <span>🔄</span> Reset
+                        </button>
+                        <span class="query-info" id="logs-count-info">Ready to search</span>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Results Table -->
+            <div class="logs-results" id="logs-results-container" style="display: none;">
+                <div class="logs-results-header">
+                    <h3>Search Results</h3>
+                    <div class="results-actions">
+                        <button class="btn btn-secondary btn-sm" onclick="exportLogs()">
+                            <span>📥</span> Export CSV
+                        </button>
+                        <button class="btn btn-secondary btn-sm" onclick="selectAllLogs()">
+                            <span>✓</span> Select All
+                        </button>
+                        <button class="btn btn-primary btn-sm" onclick="bulkFixLogs()">
+                            <span>🤖</span> AI Fix Selected
+                        </button>
+                    </div>
+                </div>
+
+                <div class="logs-table-container">
+                    <table class="logs-table">
+                        <thead>
+                            <tr>
+                                <th width="40px"><input type="checkbox" id="select-all-logs" onchange="toggleAllLogs(this)"></th>
+                                <th>Timestamp</th>
+                                <th>Severity</th>
+                                <th>Service</th>
+                                <th>Message</th>
+                                <th>Source</th>
+                                <th width="200px">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logs-table-body">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="logs-pagination">
+                    <button class="btn btn-secondary btn-sm" onclick="loadPreviousLogs()">← Previous</button>
+                    <span class="pagination-info">Page 1 of 5</span>
+                    <button class="btn btn-secondary btn-sm" onclick="loadNextLogs()">Next →</button>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div class="logs-empty-state" id="logs-empty-state">
+                <div class="empty-icon">🔍</div>
+                <h3>Search Observability Logs</h3>
+                <p>Configure your query above and click "Search Logs" to fetch entries from your observability platforms.</p>
+            </div>
+        </div>
+
+        <!-- Alert Rules Tab -->
+        <div class="tab-content" id="alert-rules-tab">
+            <div class="alert-rules-header">
+                <h2 class="section-title">📋 Alert Rules Management</h2>
+                <button class="btn btn-primary" onclick="openCreateAlertRule()">
+                    <span>➕</span> Create New Alert Rule
+                </button>
+            </div>
+
+            <div class="alert-rules-info">
+                <div class="info-banner">
+                    <span class="info-icon">💡</span>
+                    <div>
+                        <strong>Unified Alert Management</strong>
+                        <p>Create alert rules once and automatically apply them across all observability platforms (Datadog, Rollbar, New Relic, Sentry) for all your projects.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert-rules-list">
+                <div class="alert-rule-card">
+                    <div class="alert-rule-header">
+                        <div>
+                            <h3>🚨 Critical: API Response Time</h3>
+                            <span class="rule-badge critical">Critical</span>
+                            <span class="rule-badge active">Active</span>
+                        </div>
+                        <button class="btn btn-secondary btn-sm" onclick="editAlertRule('api-response')">Edit</button>
+                    </div>
+                    <div class="alert-rule-body">
+                        <div class="rule-condition">
+                            <strong>Condition:</strong> Response time > 1000ms for 5 consecutive minutes
+                        </div>
+                        <div class="rule-platforms">
+                            <strong>Applied to:</strong>
+                            <span class="platform-tag">📊 Datadog</span>
+                            <span class="platform-tag">☁️ CloudWatch</span>
+                            <span class="platform-tag">📈 New Relic</span>
+                        </div>
+                        <div class="rule-projects">
+                            <strong>Projects:</strong> All Projects (3)
+                        </div>
+                    </div>
+                    <div class="alert-rule-footer">
+                        <span class="rule-meta">Created: 2 weeks ago</span>
+                        <span class="rule-meta">Triggered: 12 times</span>
+                    </div>
+                </div>
+
+                <div class="alert-rule-card">
+                    <div class="alert-rule-header">
+                        <div>
+                            <h3>⚠️ Warning: High Memory Usage</h3>
+                            <span class="rule-badge warning">Warning</span>
+                            <span class="rule-badge active">Active</span>
+                        </div>
+                        <button class="btn btn-secondary btn-sm" onclick="editAlertRule('memory-usage')">Edit</button>
+                    </div>
+                    <div class="alert-rule-body">
+                        <div class="rule-condition">
+                            <strong>Condition:</strong> Memory usage > 80% for 10 minutes
+                        </div>
+                        <div class="rule-platforms">
+                            <strong>Applied to:</strong>
+                            <span class="platform-tag">📊 Datadog</span>
+                        </div>
+                        <div class="rule-projects">
+                            <strong>Projects:</strong> GRC Spend Management, Workforce Solutions
+                        </div>
+                    </div>
+                    <div class="alert-rule-footer">
+                        <span class="rule-meta">Created: 1 month ago</span>
+                        <span class="rule-meta">Triggered: 8 times</span>
+                    </div>
+                </div>
+
+                <div class="alert-rule-card">
+                    <div class="alert-rule-header">
+                        <div>
+                            <h3>🐛 Error: Unhandled Exceptions</h3>
+                            <span class="rule-badge high">High</span>
+                            <span class="rule-badge active">Active</span>
+                        </div>
+                        <button class="btn btn-secondary btn-sm" onclick="editAlertRule('exceptions')">Edit</button>
+                    </div>
+                    <div class="alert-rule-body">
+                        <div class="rule-condition">
+                            <strong>Condition:</strong> More than 10 unhandled exceptions in 5 minutes
+                        </div>
+                        <div class="rule-platforms">
+                            <strong>Applied to:</strong>
+                            <span class="platform-tag">🐛 Rollbar</span>
+                            <span class="platform-tag">🔍 Sentry</span>
+                        </div>
+                        <div class="rule-projects">
+                            <strong>Projects:</strong> All Projects (3)
+                        </div>
+                    </div>
+                    <div class="alert-rule-footer">
+                        <span class="rule-meta">Created: 3 weeks ago</span>
+                        <span class="rule-meta">Triggered: 24 times</span>
+                    </div>
+                </div>
+
+                <div class="alert-rule-card">
+                    <div class="alert-rule-header">
+                        <div>
+                            <h3>📉 Info: Database Query Performance</h3>
+                            <span class="rule-badge info">Info</span>
+                            <span class="rule-badge active">Active</span>
+                        </div>
+                        <button class="btn btn-secondary btn-sm" onclick="editAlertRule('db-query')">Edit</button>
+                    </div>
+                    <div class="alert-rule-body">
+                        <div class="rule-condition">
+                            <strong>Condition:</strong> Query execution time > 500ms
+                        </div>
+                        <div class="rule-platforms">
+                            <strong>Applied to:</strong>
+                            <span class="platform-tag">📊 Datadog</span>
+                            <span class="platform-tag">☁️ CloudWatch</span>
+                            <span class="platform-tag">📈 New Relic</span>
+                        </div>
+                        <div class="rule-projects">
+                            <strong>Projects:</strong> GRC Spend Management
+                        </div>
+                    </div>
+                    <div class="alert-rule-footer">
+                        <span class="rule-meta">Created: 5 days ago</span>
+                        <span class="rule-meta">Triggered: 45 times</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Tab -->
+        <div class="tab-content" id="settings-tab">
+            <h2 class="section-title">⚙️ Settings & Configuration</h2>
+
+            <div class="settings-sections">
+                <div class="settings-card">
+                    <h3>🔔 Notification Preferences</h3>
+                    <div class="settings-group">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label>Critical Alerts</label>
+                                <p>Receive immediate notifications for critical incidents</p>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label>Email Digests</label>
+                                <p>Daily summary of incidents and fixes</p>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label>Teams Notifications</label>
+                                <p>Send updates to Microsoft Teams</p>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <h3>🤖 AI Configuration</h3>
+                    <div class="settings-group">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label>Auto-Fix Threshold</label>
+                                <p>Minimum confidence level for automatic fixes</p>
+                            </div>
+                            <div class="setting-value">
+                                <input type="range" min="50" max="95" value="80" class="slider">
+                                <span class="setting-number">80%</span>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label>Auto-Assign PRs</label>
+                                <p>Automatically assign PRs to available developers</p>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <h3>🔐 Security & Access</h3>
+                    <div class="settings-group">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label>Two-Factor Authentication</label>
+                                <p>Add an extra layer of security</p>
+                            </div>
+                            <button class="btn btn-secondary btn-sm">Enable</button>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label>API Keys</label>
+                                <p>Manage API access tokens</p>
+                            </div>
+                            <button class="btn btn-secondary btn-sm">Manage</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Demo Modal -->
+    <div class="modal" id="demo-modal">
+        <div class="modal-overlay" onclick="closeModal()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🎬 Live Demo: Zero Downtime</h2>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-description">Watch as the AI system detects an issue, analyzes it, creates a fix, and assigns it to an available developer.</p>
+
+                <div class="demo-steps" id="demo-steps">
+                    <div class="demo-step" data-step="1">
+                        <span class="step-num">1</span>
+                        <div class="step-content">
+                            <span class="step-title">Detecting Issue</span>
+                            <span class="step-desc">Monitoring logs and error reports...</span>
+                        </div>
+                        <span class="step-status">⏳</span>
+                    </div>
+                    <div class="demo-step" data-step="2">
+                        <span class="step-num">2</span>
+                        <div class="step-content">
+                            <span class="step-title">Creating ADO Ticket</span>
+                            <span class="step-desc">Ticket #1234: Batch job stuck in pending</span>
+                        </div>
+                        <span class="step-status">⏸️</span>
+                    </div>
+                    <div class="demo-step" data-step="3">
+                        <span class="step-num">3</span>
+                        <div class="step-content">
+                            <span class="step-title">AI Analysis</span>
+                            <span class="step-desc">Analyzing code, commits, and context...</span>
+                        </div>
+                        <span class="step-status">⏸️</span>
+                    </div>
+                    <div class="demo-step" data-step="4">
+                        <span class="step-num">4</span>
+                        <div class="step-content">
+                            <span class="step-title">Generating Fix</span>
+                            <span class="step-desc">Creating PR with code changes...</span>
+                        </div>
+                        <span class="step-status">⏸️</span>
+                    </div>
+                    <div class="demo-step" data-step="5">
+                        <span class="step-num">5</span>
+                        <div class="step-content">
+                            <span class="step-title">Finding Reviewer</span>
+                            <span class="step-desc">Checking developer availability...</span>
+                        </div>
+                        <span class="step-status">⏸️</span>
+                    </div>
+                    <div class="demo-step" data-step="6">
+                        <span class="step-num">6</span>
+                        <div class="step-content">
+                            <span class="step-title">Assigning PR</span>
+                            <span class="step-desc">Sending notification via Teams...</span>
+                        </div>
+                        <span class="step-status">⏸️</span>
+                    </div>
+                </div>
+
+                <div class="demo-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="demo-progress"></div>
+                    </div>
+                    <p class="progress-text" id="demo-status">Initializing...</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Incident Detail Modal -->
+    <div class="modal" id="incident-modal">
+        <div class="modal-overlay" onclick="closeIncidentModal()"></div>
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2>🔥 Incident Details</h2>
+                <button class="modal-close" onclick="closeIncidentModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="incident-detail-content">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- How It Works Guide Modal -->
+    <div class="modal" id="guide-modal">
+        <div class="modal-overlay" onclick="closeGuide()"></div>
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2>📖 How Zero Downtime Works</h2>
+                <button class="modal-close" onclick="closeGuide()">&times;</button>
+            </div>
+            <div class="modal-body guide-content">
+                <!-- Overview -->
+                <div class="guide-section">
+                    <h3>🎯 Overview</h3>
+                    <p>Zero Downtime is an intelligent AI-powered DevOps automation system that monitors your production environment 24/7, automatically detects issues, diagnoses root causes using AI, generates fixes, and intelligently assigns them to available team members.</p>
+                    <div class="guide-highlight">
+                        <strong>Result:</strong> 90% faster incident resolution (15 min vs 2-4 hrs) with 67% auto-fix success rate, saving $117K/year in developer time.
+                    </div>
+                </div>
+
+                <!-- The Workflow -->
+                <div class="guide-section">
+                    <h3>🔄 End-to-End Automated Workflow</h3>
+                    <div class="workflow-steps">
+                        <div class="workflow-step">
+                            <div class="workflow-step-number">1</div>
+                            <div class="workflow-step-content">
+                                <h4>🔍 Continuous Monitoring</h4>
+                                <p><strong>What happens:</strong> System monitors multiple data sources in real-time</p>
+                                <ul>
+                                    <li><strong>GitHub:</strong> Repository events, pipeline failures, deployment issues</li>
+                                    <li><strong>Observability Tools:</strong> Datadog metrics, AWS CloudWatch logs, Rollbar errors, New Relic APM, Sentry exceptions</li>
+                                    <li><strong>Application Logs:</strong> Batch jobs stuck, API timeouts, database issues</li>
+                                    <li><strong>Azure DevOps:</strong> Work item status, sprint progress, build failures</li>
+                                </ul>
+                                <p class="workflow-example">📌 <strong>Example:</strong> Detects batch job stuck in "pending" state for 2+ hours</p>
+                            </div>
+                        </div>
+
+                        <div class="workflow-step">
+                            <div class="workflow-step-number">2</div>
+                            <div class="workflow-step-content">
+                                <h4>📋 Automatic Ticket Creation</h4>
+                                <p><strong>What happens:</strong> System creates a structured ADO work item</p>
+                                <ul>
+                                    <li>Generates descriptive title and detailed description</li>
+                                    <li>Tags with appropriate labels (bug, performance, critical)</li>
+                                    <li>Links to relevant logs and error traces</li>
+                                    <li>Assigns to correct project and sprint</li>
+                                </ul>
+                                <p class="workflow-example">📌 <strong>Example:</strong> Creates ticket "AB#1618776: Batch Job Stuck in Pending"</p>
+                            </div>
+                        </div>
+
+                        <div class="workflow-step">
+                            <div class="workflow-step-number">3</div>
+                            <div class="workflow-step-content">
+                                <h4>🧠 AI-Powered Root Cause Analysis</h4>
+                                <p><strong>What happens:</strong> AI analyzes the issue with full context</p>
+                                <ul>
+                                    <li><strong>Code Analysis:</strong> Reads relevant service files, models, controllers</li>
+                                    <li><strong>Git History:</strong> Checks recent commits that touched affected files</li>
+                                    <li><strong>Error Patterns:</strong> Compares with similar past incidents</li>
+                                    <li><strong>Dependencies:</strong> Analyzes related services and integrations</li>
+                                </ul>
+                                <p class="workflow-example">📌 <strong>Example Output:</strong> "Redis connection pool exhaustion at line 42 of create_models_data.rb due to processing 10,000+ records without pagination"</p>
+                            </div>
+                        </div>
+
+                        <div class="workflow-step">
+                            <div class="workflow-step-number">4</div>
+                            <div class="workflow-step-content">
+                                <h4>🔧 Automatic Fix Generation</h4>
+                                <p><strong>What happens:</strong> AI generates code fix with confidence score</p>
+                                <ul>
+                                    <li>Identifies exact files and line numbers to modify</li>
+                                    <li>Generates code changes following project patterns</li>
+                                    <li>Runs automated tests to verify fix</li>
+                                    <li>Calculates confidence score (0-100%)</li>
+                                </ul>
+                                <p class="workflow-example">📌 <strong>Example Fix:</strong> "Replace Model.all.each with Model.find_each(batch_size: 500)" (87% confidence)</p>
+                            </div>
+                        </div>
+
+                        <div class="workflow-step">
+                            <div class="workflow-step-number">5</div>
+                            <div class="workflow-step-content">
+                                <h4>📦 Pull Request Creation</h4>
+                                <p><strong>What happens:</strong> System creates GitHub PR automatically</p>
+                                <ul>
+                                    <li>Creates new branch with descriptive name</li>
+                                    <li>Commits fix code with detailed message</li>
+                                    <li>Opens PR with analysis and testing results</li>
+                                    <li>Links PR back to ADO ticket</li>
+                                    <li>Adds comment to ADO ticket with PR link</li>
+                                </ul>
+                                <p class="workflow-example">📌 <strong>Example:</strong> Creates PR #1234 linked to AB#1618776</p>
+                            </div>
+                        </div>
+
+                        <div class="workflow-step">
+                            <div class="workflow-step-number">6</div>
+                            <div class="workflow-step-content">
+                                <h4>👥 Intelligent Team Assignment</h4>
+                                <p><strong>What happens:</strong> AI finds the best available developer</p>
+                                <ul>
+                                    <li><strong>Availability Check:</strong> Queries calendar for meetings, PTO, focus time</li>
+                                    <li><strong>Workload Analysis:</strong> Counts current open PRs and tickets</li>
+                                    <li><strong>Expertise Matching:</strong> Analyzes past contributions to similar code</li>
+                                    <li><strong>Response Time:</strong> Considers historical review speed</li>
+                                </ul>
+                                <p class="workflow-example">📌 <strong>Example:</strong> Assigns to Rahul Sharma (available, 2.3hr avg response, expert in batch jobs)</p>
+                            </div>
+                        </div>
+
+                        <div class="workflow-step">
+                            <div class="workflow-step-number">7</div>
+                            <div class="workflow-step-content">
+                                <h4>💬 Notification & Review Request</h4>
+                                <p><strong>What happens:</strong> Developer receives smart notification</p>
+                                <ul>
+                                    <li>Sends Microsoft Teams direct message with context</li>
+                                    <li>Includes incident summary and fix overview</li>
+                                    <li>Provides one-click links to PR and ticket</li>
+                                    <li>Shows confidence score and test results</li>
+                                </ul>
+                                <p class="workflow-example">📌 <strong>Teams Message:</strong> "🤖 AI fixed AB#1618776 (87% confident). PR #1234 ready for review. Tests passing ✅"</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Key Integrations -->
+                <div class="guide-section">
+                    <h3>🔗 System Integrations</h3>
+                    <div class="integrations-grid-guide">
+                        <div class="integration-guide-card">
+                            <div class="integration-guide-icon">📦</div>
+                            <h4>GitHub</h4>
+                            <ul>
+                                <li>Monitor repository events</li>
+                                <li>Create branches and PRs</li>
+                                <li>Run automated tests</li>
+                                <li>Track deployment status</li>
+                            </ul>
+                        </div>
+                        <div class="integration-guide-card">
+                            <div class="integration-guide-icon">📋</div>
+                            <h4>Azure DevOps</h4>
+                            <ul>
+                                <li>Create and update work items</li>
+                                <li>Link PRs to tickets</li>
+                                <li>Track sprint progress</li>
+                                <li>Update ticket status</li>
+                            </ul>
+                        </div>
+                        <div class="integration-guide-card">
+                            <div class="integration-guide-icon">📊</div>
+                            <h4>Observability</h4>
+                            <ul>
+                                <li>Datadog: Metrics & traces</li>
+                                <li>Rollbar: Error tracking</li>
+                                <li>New Relic: Performance</li>
+                                <li>Custom log aggregation</li>
+                            </ul>
+                        </div>
+                        <div class="integration-guide-card">
+                            <div class="integration-guide-icon">💬</div>
+                            <h4>Microsoft Teams</h4>
+                            <ul>
+                                <li>Direct message notifications</li>
+                                <li>Team channel updates</li>
+                                <li>Calendar availability check</li>
+                                <li>One-click PR reviews</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Safety Mechanisms -->
+                <div class="guide-section">
+                    <h3>🛡️ Safety & Quality Mechanisms</h3>
+                    <div class="safety-features">
+                        <div class="safety-feature">
+                            <div class="safety-icon">🎯</div>
+                            <h4>Confidence Scoring</h4>
+                            <p>AI calculates confidence for each fix (0-100%). Only fixes above 80% confidence are auto-created. Lower confidence triggers human review first.</p>
+                        </div>
+                        <div class="safety-feature">
+                            <div class="safety-icon">🧪</div>
+                            <h4>Automated Testing</h4>
+                            <p>All fixes run through existing test suite before PR creation. Failed tests block PR and flag for manual investigation.</p>
+                        </div>
+                        <div class="safety-feature">
+                            <div class="safety-icon">👁️</div>
+                            <h4>Human Review Gate</h4>
+                            <p>No auto-merge to main/master. Every PR requires human review and approval, even for high-confidence fixes.</p>
+                        </div>
+                        <div class="safety-feature">
+                            <div class="safety-icon">📜</div>
+                            <h4>Full Audit Trail</h4>
+                            <p>Every action logged: detection timestamp, analysis context, fix generation, who reviewed, when merged.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Impact Metrics -->
+                <div class="guide-section">
+                    <h3>📈 Measurable Impact</h3>
+                    <div class="impact-grid">
+                        <div class="impact-card">
+                            <div class="impact-metric">90%</div>
+                            <div class="impact-label">Faster Resolution</div>
+                            <div class="impact-detail">15 min vs 2-4 hrs</div>
+                        </div>
+                        <div class="impact-card">
+                            <div class="impact-metric">67%</div>
+                            <div class="impact-label">Auto-Fix Rate</div>
+                            <div class="impact-detail">No human intervention</div>
+                        </div>
+                        <div class="impact-card">
+                            <div class="impact-metric">$117K</div>
+                            <div class="impact-label">Annual Savings</div>
+                            <div class="impact-detail">Developer time recovered</div>
+                        </div>
+                        <div class="impact-card">
+                            <div class="impact-metric">82%</div>
+                            <div class="impact-label">Proactive Detection</div>
+                            <div class="impact-detail">Before customer impact</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Example Scenario -->
+                <div class="guide-section">
+                    <h3>🎬 Real-World Example</h3>
+                    <div class="example-scenario">
+                        <div class="scenario-timeline">
+                            <div class="scenario-time">00:00</div>
+                            <div class="scenario-event">
+                                <strong>Issue Occurs:</strong> Batch job processing device models gets stuck in "pending" state
+                            </div>
+                        </div>
+                        <div class="scenario-timeline">
+                            <div class="scenario-time">00:05</div>
+                            <div class="scenario-event">
+                                <strong>Detection:</strong> Monitoring system notices job stuck for 2+ hours, alerts AI platform
+                            </div>
+                        </div>
+                        <div class="scenario-timeline">
+                            <div class="scenario-time">00:08</div>
+                            <div class="scenario-event">
+                                <strong>Ticket Created:</strong> ADO ticket AB#1618776 auto-generated with logs and context
+                            </div>
+                        </div>
+                        <div class="scenario-timeline">
+                            <div class="scenario-time">00:10</div>
+                            <div class="scenario-event">
+                                <strong>AI Analysis:</strong> Diagnoses Redis connection pool exhaustion, identifies line 42 of create_models_data.rb
+                            </div>
+                        </div>
+                        <div class="scenario-timeline">
+                            <div class="scenario-time">00:18</div>
+                            <div class="scenario-event">
+                                <strong>Fix Generated:</strong> AI suggests replacing Model.all.each with Model.find_each(batch_size: 500)
+                            </div>
+                        </div>
+                        <div class="scenario-timeline">
+                            <div class="scenario-time">00:23</div>
+                            <div class="scenario-event">
+                                <strong>PR Created:</strong> GitHub PR #1234 opened with fix code, linked to ADO ticket
+                            </div>
+                        </div>
+                        <div class="scenario-timeline">
+                            <div class="scenario-time">00:28</div>
+                            <div class="scenario-event">
+                                <strong>Assignment:</strong> Rahul Sharma identified as best reviewer (available, relevant expertise)
+                            </div>
+                        </div>
+                        <div class="scenario-timeline">
+                            <div class="scenario-time">00:30</div>
+                            <div class="scenario-event">
+                                <strong>Notification Sent:</strong> Teams message delivered with one-click review link
+                            </div>
+                        </div>
+                        <div class="scenario-timeline highlight">
+                            <div class="scenario-time">✅</div>
+                            <div class="scenario-event">
+                                <strong>Total Time:</strong> 30 seconds from issue to assigned PR (vs 2-4 hours manual process)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Call to Action -->
+                <div class="guide-section guide-cta">
+                    <h3>🚀 See It In Action</h3>
+                    <p>Click the <strong>"Start Live Demo"</strong> button to watch the complete workflow in real-time. The demo simulates a real production incident being detected, analyzed, fixed, and assigned automatically.</p>
+                    <button class="btn btn-primary btn-lg" onclick="closeGuide(); setTimeout(startDemo, 500);">
+                        <span class="btn-icon">▶️</span>
+                        Launch Live Demo
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Management Modal -->
+    <div class="modal" id="project-manager-modal">
+        <div class="modal-overlay" onclick="closeProjectManager()"></div>
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2>⚙️ Project Configuration</h2>
+                <button class="modal-close" onclick="closeProjectManager()">&times;</button>
+            </div>
+            <div class="modal-body" id="project-config-content">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Create/Edit Project Modal -->
+    <div class="modal" id="create-project-modal">
+        <div class="modal-overlay" onclick="closeCreateProject()"></div>
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2 id="project-modal-title">➕ Create New Project</h2>
+                <button class="modal-close" onclick="closeCreateProject()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="project-form" onsubmit="saveProject(event)">
+                    <!-- Project Basic Info -->
+                    <div class="form-section">
+                        <h3>📋 Project Information</h3>
+                        <div class="form-group">
+                            <label for="project-name">Project Name *</label>
+                            <input type="text" id="project-name" required placeholder="e.g., GRC Spend Management">
+                        </div>
+                        <div class="form-group">
+                            <label for="project-description">Description</label>
+                            <textarea id="project-description" rows="3" placeholder="Brief description of the project"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Azure DevOps Configuration -->
+                    <div class="form-section">
+                        <h3>📋 Azure DevOps Boards</h3>
+                        <div id="ado-boards-container">
+                            <div class="ado-board-item">
+                                <div class="form-group">
+                                    <label>Organization URL</label>
+                                    <input type="text" class="ado-org" placeholder="https://dev.azure.com/your-org">
+                                </div>
+                                <div class="form-group">
+                                    <label>Project Name</label>
+                                    <input type="text" class="ado-project" placeholder="e.g., GRC-Spend">
+                                </div>
+                                <div class="form-group">
+                                    <label>Board Name</label>
+                                    <input type="text" class="ado-board" placeholder="e.g., Sprint Board">
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="addAdoBoard()">
+                            <span>➕</span> Add Another ADO Board
+                        </button>
+                    </div>
+
+                    <!-- GitHub Repositories -->
+                    <div class="form-section">
+                        <h3>📦 GitHub Repositories</h3>
+                        <div id="github-repos-container">
+                            <div class="github-repo-item">
+                                <div class="form-group">
+                                    <label>Repository Owner</label>
+                                    <input type="text" class="repo-owner" placeholder="e.g., symplr">
+                                </div>
+                                <div class="form-group">
+                                    <label>Repository Name</label>
+                                    <input type="text" class="repo-name" placeholder="e.g., grc-spend-greenlight">
+                                </div>
+                                <div class="form-group">
+                                    <label>Branch to Monitor</label>
+                                    <input type="text" class="repo-branch" placeholder="e.g., main" value="main">
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="addGithubRepo()">
+                            <span>➕</span> Add Another Repository
+                        </button>
+                    </div>
+
+                    <!-- Observability Platforms -->
+                    <div class="form-section">
+                        <h3>📊 Observability Platforms</h3>
+
+                        <div class="observability-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="datadog-enabled">
+                                <span class="platform-logo">📊</span>
+                                <span>Datadog</span>
+                            </label>
+                            <div class="platform-config" id="datadog-config" style="display: none;">
+                                <input type="text" placeholder="API Key" class="obs-input">
+                                <input type="text" placeholder="App Key" class="obs-input">
+                                <input type="text" placeholder="Site (e.g., datadoghq.com)" class="obs-input">
+                            </div>
+                        </div>
+
+                        <div class="observability-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="cloudwatch-enabled">
+                                <span class="platform-logo">☁️</span>
+                                <span>AWS CloudWatch</span>
+                            </label>
+                            <div class="platform-config" id="cloudwatch-config" style="display: none;">
+                                <input type="text" placeholder="AWS Access Key ID" class="obs-input">
+                                <input type="text" placeholder="AWS Secret Access Key" class="obs-input">
+                                <input type="text" placeholder="AWS Region (e.g., us-east-1)" class="obs-input">
+                                <input type="text" placeholder="Log Group Name" class="obs-input">
+                            </div>
+                        </div>
+
+                        <div class="observability-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="rollbar-enabled">
+                                <span class="platform-logo">🐛</span>
+                                <span>Rollbar</span>
+                            </label>
+                            <div class="platform-config" id="rollbar-config" style="display: none;">
+                                <input type="text" placeholder="Access Token" class="obs-input">
+                                <input type="text" placeholder="Project Name" class="obs-input">
+                            </div>
+                        </div>
+
+                        <div class="observability-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="newrelic-enabled">
+                                <span class="platform-logo">📈</span>
+                                <span>New Relic</span>
+                            </label>
+                            <div class="platform-config" id="newrelic-config" style="display: none;">
+                                <input type="text" placeholder="API Key" class="obs-input">
+                                <input type="text" placeholder="Account ID" class="obs-input">
+                            </div>
+                        </div>
+
+                        <div class="observability-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="sentry-enabled">
+                                <span class="platform-logo">🔍</span>
+                                <span>Sentry</span>
+                            </label>
+                            <div class="platform-config" id="sentry-config" style="display: none;">
+                                <input type="text" placeholder="DSN" class="obs-input">
+                                <input type="text" placeholder="Organization Slug" class="obs-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Microsoft Teams -->
+                    <div class="form-section">
+                        <h3>💬 Microsoft Teams Notifications</h3>
+                        <div class="form-group">
+                            <label>Webhook URL</label>
+                            <input type="text" id="teams-webhook" placeholder="https://outlook.office.com/webhook/...">
+                        </div>
+                        <div class="form-group">
+                            <label>Notification Channel</label>
+                            <input type="text" id="teams-channel" placeholder="e.g., #devops-alerts">
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="closeCreateProject()">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Project</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Log Detail & Action Modal -->
+    <div class="modal" id="log-detail-modal">
+        <div class="modal-overlay" onclick="closeLogDetail()"></div>
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2>📋 Log Entry Details</h2>
+                <button class="modal-close" onclick="closeLogDetail()">&times;</button>
+            </div>
+            <div class="modal-body" id="log-detail-content">
+                <!-- Populated by JavaScript -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeLogDetail()">Close</button>
+                <button class="btn btn-primary" onclick="aiFixLog()">
+                    <span>🤖</span> AI Auto-Fix
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create/Edit Alert Rule Modal -->
+    <div class="modal" id="create-alert-rule-modal">
+        <div class="modal-overlay" onclick="closeCreateAlertRule()"></div>
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2 id="alert-rule-modal-title">➕ Create New Alert Rule</h2>
+                <button class="modal-close" onclick="closeCreateAlertRule()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="alert-rule-form" onsubmit="saveAlertRule(event)">
+                    <!-- Rule Basic Info -->
+                    <div class="form-section">
+                        <h3>📋 Rule Information</h3>
+                        <div class="form-group">
+                            <label for="rule-name">Rule Name *</label>
+                            <input type="text" id="rule-name" required placeholder="e.g., High CPU Usage Alert">
+                        </div>
+                        <div class="form-group">
+                            <label for="rule-description">Description</label>
+                            <textarea id="rule-description" rows="2" placeholder="Brief description of this alert rule"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="rule-severity">Severity Level *</label>
+                            <select id="rule-severity" required>
+                                <option value="critical">🚨 Critical - Immediate action required</option>
+                                <option value="high">⚠️ High - Urgent attention needed</option>
+                                <option value="warning">⚠️ Warning - Should be addressed soon</option>
+                                <option value="info">ℹ️ Info - Informational only</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Alert Condition -->
+                    <div class="form-section">
+                        <h3>🎯 Alert Condition</h3>
+                        <div class="form-group">
+                            <label for="metric-type">Metric Type *</label>
+                            <select id="metric-type" required>
+                                <option value="">Select metric type...</option>
+                                <option value="response-time">API Response Time</option>
+                                <option value="cpu">CPU Usage</option>
+                                <option value="memory">Memory Usage</option>
+                                <option value="disk">Disk Usage</option>
+                                <option value="error-rate">Error Rate</option>
+                                <option value="exception-count">Exception Count</option>
+                                <option value="query-time">Database Query Time</option>
+                                <option value="throughput">Request Throughput</option>
+                                <option value="custom">Custom Metric</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="condition-operator">Operator *</label>
+                                <select id="condition-operator" required>
+                                    <option value="gt">Greater than (>)</option>
+                                    <option value="gte">Greater than or equal (≥)</option>
+                                    <option value="lt">Less than (<)</option>
+                                    <option value="lte">Less than or equal (≤)</option>
+                                    <option value="eq">Equal to (=)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="threshold-value">Threshold Value *</label>
+                                <input type="number" id="threshold-value" required placeholder="e.g., 80">
+                            </div>
+                            <div class="form-group">
+                                <label for="threshold-unit">Unit</label>
+                                <select id="threshold-unit">
+                                    <option value="ms">Milliseconds (ms)</option>
+                                    <option value="s">Seconds (s)</option>
+                                    <option value="percent">Percentage (%)</option>
+                                    <option value="count">Count</option>
+                                    <option value="mb">Megabytes (MB)</option>
+                                    <option value="gb">Gigabytes (GB)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="duration">Duration (consecutive) *</label>
+                            <input type="text" id="duration" required placeholder="e.g., 5 minutes" value="5 minutes">
+                            <small>How long the condition must be true before triggering</small>
+                        </div>
+                    </div>
+
+                    <!-- Target Platforms -->
+                    <div class="form-section">
+                        <h3>📊 Target Observability Platforms</h3>
+                        <p class="form-help">Select which platforms to create this alert in</p>
+
+                        <div class="platform-checkbox-grid">
+                            <label class="platform-checkbox">
+                                <input type="checkbox" name="platforms" value="datadog" checked>
+                                <div class="platform-checkbox-content">
+                                    <span class="platform-icon">📊</span>
+                                    <span class="platform-name">Datadog</span>
+                                </div>
+                            </label>
+
+                            <label class="platform-checkbox">
+                                <input type="checkbox" name="platforms" value="cloudwatch" checked>
+                                <div class="platform-checkbox-content">
+                                    <span class="platform-icon">☁️</span>
+                                    <span class="platform-name">AWS CloudWatch</span>
+                                </div>
+                            </label>
+
+                            <label class="platform-checkbox">
+                                <input type="checkbox" name="platforms" value="rollbar">
+                                <div class="platform-checkbox-content">
+                                    <span class="platform-icon">🐛</span>
+                                    <span class="platform-name">Rollbar</span>
+                                </div>
+                            </label>
+
+                            <label class="platform-checkbox">
+                                <input type="checkbox" name="platforms" value="newrelic">
+                                <div class="platform-checkbox-content">
+                                    <span class="platform-icon">📈</span>
+                                    <span class="platform-name">New Relic</span>
+                                </div>
+                            </label>
+
+                            <label class="platform-checkbox">
+                                <input type="checkbox" name="platforms" value="sentry">
+                                <div class="platform-checkbox-content">
+                                    <span class="platform-icon">🔍</span>
+                                    <span class="platform-name">Sentry</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Target Projects -->
+                    <div class="form-section">
+                        <h3>📁 Target Projects</h3>
+                        <p class="form-help">Select which projects this alert rule applies to</p>
+
+                        <label class="checkbox-item">
+                            <input type="checkbox" id="all-projects" checked onchange="toggleAllProjects(this)">
+                            <span class="checkbox-label-text"><strong>All Projects</strong></span>
+                        </label>
+
+                        <div id="project-checkboxes" style="margin-top: 1rem; opacity: 0.5; pointer-events: none;">
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="projects" value="grc-spend" checked disabled>
+                                <span class="checkbox-label-text">GRC Spend Management</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="projects" value="workforce" checked disabled>
+                                <span class="checkbox-label-text">Workforce Solutions</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="projects" value="provider" checked disabled>
+                                <span class="checkbox-label-text">Provider Platform</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Notification Settings -->
+                    <div class="form-section">
+                        <h3>🔔 Notification Settings</h3>
+                        <div class="notification-options">
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="notify-teams" checked>
+                                <span class="checkbox-label-text">Send Microsoft Teams notification</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="notify-email" checked>
+                                <span class="checkbox-label-text">Send email notification</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="create-ticket">
+                                <span class="checkbox-label-text">Automatically create ADO ticket</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="trigger-ai">
+                                <span class="checkbox-label-text">Trigger AI auto-fix analysis</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="closeCreateAlertRule()">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Create Alert Rule</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<%= javascript_include_tag "app", "data-turbo-track": "reload" %>
