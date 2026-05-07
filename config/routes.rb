@@ -6,6 +6,10 @@ Rails.application.routes.draw do
     end
   end
 
+  # GitHub OAuth callback
+  get '/auth/github/callback', to: 'github#callback'
+  get '/auth/failure', to: 'github#failure'
+
   # Home controller routes
   get 'home/new'
   post 'home/submit'

@@ -19,6 +19,12 @@ class ProjectsController < ApplicationController
 
   def connect_github
     @project = Project.find(params[:id])
+
+    # Store project ID in session for callback
+    session[:github_project_id] = @project.id
+
+    # Redirect to GitHub OAuth
+    redirect_to '/auth/github', allow_other_host: true
   end
 
   private

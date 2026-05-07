@@ -5,6 +5,18 @@
         <div class="tab-content active">
             <h2 class="section-title">📁 Projects</h2>
 
+            <% if flash[:notice] %>
+                <div style="background: #D4EDDA; color: #155724; padding: 15px; border-radius: 4px; margin-bottom: 20px;">
+                    <%= flash[:notice] %>
+                </div>
+            <% end %>
+
+            <% if flash[:alert] %>
+                <div style="background: #F8D7DA; color: #721C24; padding: 15px; border-radius: 4px; margin-bottom: 20px;">
+                    <%= flash[:alert] %>
+                </div>
+            <% end %>
+
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
                 <p style="color: #6C757D;">Manage your Zero Downtime projects</p>
                 <%= link_to new_project_path, class: "btn btn-primary" do %>
@@ -27,9 +39,17 @@
                                 <span style="color: #6C757D; font-size: 0.875rem;">
                                     Created <%= time_ago_in_words(project.created_at) %> ago
                                 </span>
-                                <%= link_to connect_github_project_path(project), style: "background: #00A3E0; color: white; padding: 8px 16px; border-radius: 4px; text-decoration: none; font-size: 0.875rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;" do %>
-                                    <span>🔗</span>
-                                    Connect GitHub
+                                <% if project.github_username.present? %>
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <span style="color: #28A745; font-size: 0.875rem; font-weight: 600;">
+                                            ✅ Connected to @<%= project.github_username %>
+                                        </span>
+                                    </div>
+                                <% else %>
+                                    <%= link_to connect_github_project_path(project), style: "background: #00A3E0; color: white; padding: 8px 16px; border-radius: 4px; text-decoration: none; font-size: 0.875rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;" do %>
+                                        <span>🔗</span>
+                                        Connect GitHub
+                                    <% end %>
                                 <% end %>
                             </div>
                         </div>
