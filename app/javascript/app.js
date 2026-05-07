@@ -345,13 +345,7 @@ function closeIncidentModal() {
 let activityCount = 1;
 
 function startActivityFeed() {
-    // Add initial activities
-    addActivity('🟢', 'System initialized and monitoring active');
-
-    setTimeout(() => addActivity('🔍', 'Scanning GitHub repositories...'), 2000);
-    setTimeout(() => addActivity('📊', 'Connected to Datadog for metrics'), 4000);
-    setTimeout(() => addActivity('🐛', 'Connected to Rollbar for error tracking'), 6000);
-    setTimeout(() => addActivity('✅', 'All integrations healthy'), 8000);
+    // Activity feed now comes from database - no static entries
 }
 
 function addActivity(icon, text) {
