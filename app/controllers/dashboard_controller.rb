@@ -19,10 +19,6 @@ class DashboardController < ApplicationController
     @projects = Project.all
   end
 
-  def integrations
-    @projects = Project.all
-  end
-
   def team
     @projects = Project.all
   end

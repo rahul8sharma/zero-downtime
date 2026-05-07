@@ -24,7 +24,6 @@ Rails.application.routes.draw do
   get 'dashboard/alert_rules'
   get 'dashboard/projects_page'
   get 'dashboard/analytics'
-  get 'dashboard/integrations'
   get 'dashboard/team'
   get 'dashboard/activity'
   get 'dashboard/alerts'
