@@ -1,216 +1,50 @@
 <%= render 'shared/header_sidebar' %>
+
+    <!-- Main Content -->
     <main class="main-content" id="main-content">
-        <div class="tab-content active" id="projects-tab">
-            <div class="projects-header">
-                <h2>Project Management</h2>
+        <div class="tab-content active">
+            <h2 class="section-title">📁 Projects</h2>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                <p style="color: #6C757D;">Manage your Zero Downtime projects</p>
                 <%= link_to new_project_path, class: "btn btn-primary" do %>
                     <span class="btn-icon">➕</span>
                     Create New Project
                 <% end %>
             </div>
 
-            <div class="projects-list" id="projects-list">
-                <% if @projects.any? %>
-                  <% @projects.each do |project| %>
-                    <div class="project-card">
-                        <div class="project-card-header">
-                            <div>
-                                <div class="project-card-title"><%= project.name %></div>
-                                <div class="project-card-description"><%= project.description.present? ? project.description : 'No description' %></div>
-                            </div>
-                            <span class="status-badge success">Active</span>
-                        </div>
-
-                        <div class="project-card-body">
-                            <div class="project-section">
-                                <div class="project-section-title">📋 ADO Boards (0)</div>
-                                <div class="project-items-list">
-                                    <div class="project-item" style="color: #6C757D; font-style: italic;">No ADO boards configured</div>
-                                </div>
-                            </div>
-
-                            <div class="project-section">
-                                <div class="project-section-title">📦 GitHub Repos (0)</div>
-                                <div class="project-items-list">
-                                    <div class="project-item" style="color: #6C757D; font-style: italic;">No GitHub repos configured</div>
-                                </div>
-                            </div>
-
-                            <div class="project-section">
-                                <div class="project-section-title">📊 Observability</div>
-                                <div class="project-items-list">
-                                    <div class="project-item" style="color: #6C757D; font-style: italic;">No platforms configured</div>
-                                </div>
+            <% if @projects.any? %>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px;">
+                    <% @projects.each do |project| %>
+                        <div style="background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); border-left: 4px solid #00A3E0;">
+                            <h3 style="color: #212529; margin: 0 0 10px 0; font-size: 1.25rem;">
+                                <%= project.name %>
+                            </h3>
+                            <p style="color: #6C757D; margin: 0 0 15px 0; line-height: 1.6;">
+                                <%= project.description.present? ? project.description : "No description provided" %>
+                            </p>
+                            <div style="padding-top: 15px; border-top: 1px solid #DEE2E6;">
+                                <span style="color: #6C757D; font-size: 0.875rem;">
+                                    Created <%= time_ago_in_words(project.created_at) %> ago
+                                </span>
                             </div>
                         </div>
-                    </div>
-                  <% end %>
-                <% else %>
-                  <div class="empty-state">
-                      <div class="empty-icon">📁</div>
-                      <h3>No Projects Yet</h3>
-                      <p>Create your first project to get started with Zero Downtime.</p>
-                  </div>
-                <% end %>
-            </div>
+                    <% end %>
+                </div>
+            <% else %>
+                <div style="background: #F8F9FA; padding: 60px 40px; border-radius: 8px; text-align: center;">
+                    <div style="font-size: 4rem; margin-bottom: 20px;">📁</div>
+                    <h3 style="color: #212529; margin: 0 0 10px 0;">No Projects Yet</h3>
+                    <p style="color: #6C757D; margin: 0 0 20px 0;">
+                        Create your first project to get started with Zero Downtime.
+                    </p>
+                    <%= link_to new_project_path, class: "btn btn-primary" do %>
+                        <span class="btn-icon">➕</span>
+                        Create Your First Project
+                    <% end %>
+                </div>
+            <% end %>
         </div>
-
-        <!-- Team Tab -->
-        <div class="tab-content active" id="team-tab">
-            <div class="team-grid">
-                <div class="team-member available">
-                    <div class="member-avatar">RS</div>
-                    <div class="member-info">
-                        <h4>Rahul Sharma</h4>
-                        <p>Senior Developer</p>
-                        <span class="availability-badge available">Available</span>
-                    </div>
-                    <div class="member-stats">
-                        <div class="stat-item">
-                            <span class="stat-label">PRs Reviewed</span>
-                            <span class="stat-value">8</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">Avg Response</span>
-                            <span class="stat-value">2.3h</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="team-member busy">
-                    <div class="member-avatar">SK</div>
-                    <div class="member-info">
-                        <h4>Sarah Kim</h4>
-                        <p>Lead Engineer</p>
-                        <span class="availability-badge busy">In Meeting</span>
-                    </div>
-                    <div class="member-stats">
-                        <div class="stat-item">
-                            <span class="stat-label">PRs Reviewed</span>
-                            <span class="stat-value">15</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">Avg Response</span>
-                            <span class="stat-value">1.5h</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="team-member available">
-                    <div class="member-avatar">MP</div>
-                    <div class="member-info">
-                        <h4>Michael Patel</h4>
-                        <p>Senior Developer</p>
-                        <span class="availability-badge available">Available</span>
-                    </div>
-                    <div class="member-stats">
-                        <div class="stat-item">
-                            <span class="stat-label">PRs Reviewed</span>
-                            <span class="stat-value">12</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">Avg Response</span>
-                            <span class="stat-value">3.1h</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="team-member busy">
-                    <div class="member-avatar">LW</div>
-                    <div class="member-info">
-                        <h4>Lisa Wang</h4>
-                        <p>DevOps Engineer</p>
-                        <span class="availability-badge busy">Deep Work</span>
-                    </div>
-                    <div class="member-stats">
-                        <div class="stat-item">
-                            <span class="stat-label">PRs Reviewed</span>
-                            <span class="stat-value">6</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">Avg Response</span>
-                            <span class="stat-value">4.2h</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="team-member available">
-                    <div class="member-avatar">JC</div>
-                    <div class="member-info">
-                        <h4>James Chen</h4>
-                        <p>Full Stack Developer</p>
-                        <span class="availability-badge available">Available</span>
-                    </div>
-                    <div class="member-stats">
-                        <div class="stat-item">
-                            <span class="stat-label">PRs Reviewed</span>
-                            <span class="stat-value">9</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">Avg Response</span>
-                            <span class="stat-value">2.8h</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="team-member offline">
-                    <div class="member-avatar">AR</div>
-                    <div class="member-info">
-                        <h4>Anna Rodriguez</h4>
-                        <p>Backend Developer</p>
-                        <span class="availability-badge offline">Offline</span>
-                    </div>
-                    <div class="member-stats">
-                        <div class="stat-item">
-                            <span class="stat-label">PRs Reviewed</span>
-                            <span class="stat-value">11</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">Avg Response</span>
-                            <span class="stat-value">2.1h</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="team-member busy">
-                    <div class="member-avatar">DM</div>
-                    <div class="member-info">
-                        <h4>David Miller</h4>
-                        <p>Senior Engineer</p>
-                        <span class="availability-badge busy">On Call</span>
-                    </div>
-                    <div class="member-stats">
-                        <div class="stat-item">
-                            <span class="stat-label">PRs Reviewed</span>
-                            <span class="stat-value">14</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">Avg Response</span>
-                            <span class="stat-value">1.9h</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="team-member offline">
-                    <div class="member-avatar">ET</div>
-                    <div class="member-info">
-                        <h4>Emily Taylor</h4>
-                        <p>Frontend Developer</p>
-                        <span class="availability-badge offline">PTO</span>
-                    </div>
-                    <div class="member-stats">
-                        <div class="stat-item">
-                            <span class="stat-label">PRs Reviewed</span>
-                            <span class="stat-value">7</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">Avg Response</span>
-                            <span class="stat-value">3.5h</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </main>
+
 <%= javascript_include_tag "app", "data-turbo-track": "reload" %>
