@@ -20,16 +20,16 @@ class DatadogSyncErrorsJob < ApplicationJob
     uri = URI("https://api.#{site}/api/v2/logs/events/search")
 
     # Search for errors in the last 24 hours
-    from_time = 24.hours.ago.to_i * 1000
-    to_time = Time.now.to_i * 1000
+    from_time = (24.hours.ago.to_f * 1000).to_i
+    to_time = (Time.now.to_f * 1000).to_i
 
     request_body = {
       filter: {
         from: from_time.to_s,
         to: to_time.to_s,
-        query: "status:error OR status:critical"
+        query: "status:(error OR critical)"
       },
-      sort: "timestamp",
+      sort: "-timestamp",
       page: {
         limit: 100
       }
@@ -55,11 +55,14 @@ class DatadogSyncErrorsJob < ApplicationJob
         details: "Synced #{data['data']&.length || 0} errors from Datadog"
       )
     else
+      # Log the full response body for debugging
+      error_body = response.body.present? ? response.body[0..200] : 'No response body'
       Activity.log(
         action: 'datadog_sync_failed',
         project: project,
-        details: "Failed to sync errors: #{response.code} - #{response.message}"
+        details: "Failed to sync errors: #{response.code} - #{response.message}. Response: #{error_body}"
       )
+      Rails.logger.error "Datadog sync failed for project #{project.id}: #{response.code} - #{response.body}"
     end
   rescue StandardError => e
     Activity.log(
@@ -67,6 +70,7 @@ class DatadogSyncErrorsJob < ApplicationJob
       project: project,
       details: "Error syncing Datadog: #{e.message}"
     )
+    Rails.logger.error "Datadog sync error for project #{project.id}: #{e.message}\n#{e.backtrace.join("\n")}"
   end
 
   def process_errors(data, project)
