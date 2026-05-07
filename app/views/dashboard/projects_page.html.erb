@@ -3,14 +3,55 @@
         <div class="tab-content active" id="projects-tab">
             <div class="projects-header">
                 <h2>Project Management</h2>
-                <button class="btn btn-primary" onclick="openCreateProject()">
+                <%= link_to new_project_path, class: "btn btn-primary" do %>
                     <span class="btn-icon">➕</span>
                     Create New Project
-                </button>
+                <% end %>
             </div>
 
             <div class="projects-list" id="projects-list">
-                <!-- Populated by JS -->
+                <% if @projects.any? %>
+                  <% @projects.each do |project| %>
+                    <div class="project-card">
+                        <div class="project-card-header">
+                            <div>
+                                <div class="project-card-title"><%= project.name %></div>
+                                <div class="project-card-description"><%= project.description.present? ? project.description : 'No description' %></div>
+                            </div>
+                            <span class="status-badge success">Active</span>
+                        </div>
+
+                        <div class="project-card-body">
+                            <div class="project-section">
+                                <div class="project-section-title">📋 ADO Boards (0)</div>
+                                <div class="project-items-list">
+                                    <div class="project-item" style="color: #6C757D; font-style: italic;">No ADO boards configured</div>
+                                </div>
+                            </div>
+
+                            <div class="project-section">
+                                <div class="project-section-title">📦 GitHub Repos (0)</div>
+                                <div class="project-items-list">
+                                    <div class="project-item" style="color: #6C757D; font-style: italic;">No GitHub repos configured</div>
+                                </div>
+                            </div>
+
+                            <div class="project-section">
+                                <div class="project-section-title">📊 Observability</div>
+                                <div class="project-items-list">
+                                    <div class="project-item" style="color: #6C757D; font-style: italic;">No platforms configured</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  <% end %>
+                <% else %>
+                  <div class="empty-state">
+                      <div class="empty-icon">📁</div>
+                      <h3>No Projects Yet</h3>
+                      <p>Create your first project to get started with Zero Downtime.</p>
+                  </div>
+                <% end %>
             </div>
         </div>
 
