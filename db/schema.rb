@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_05_07_131306) do
+ActiveRecord::Schema[7.1].define(version: 2026_05_07_132208) do
+  create_table "activities", force: :cascade do |t|
+    t.string "action"
+    t.integer "project_id", null: false
+    t.text "details"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["project_id"], name: "index_activities_on_project_id"
+  end
+
   create_table "projects", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -25,4 +34,5 @@ ActiveRecord::Schema[7.1].define(version: 2026_05_07_131306) do
     t.string "datadog_site"
   end
 
+  add_foreign_key "activities", "projects"
 end

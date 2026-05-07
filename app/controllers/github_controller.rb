@@ -22,6 +22,12 @@ class GithubController < ApplicationController
           github_username: user_info['login']
         )
 
+        Activity.log(
+          action: 'github_authenticated',
+          project: project,
+          details: "Authenticated with GitHub as @#{user_info['login']}"
+        )
+
         # Redirect to repo selection page
         redirect_to select_repo_project_path(project)
       else

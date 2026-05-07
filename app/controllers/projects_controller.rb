@@ -11,6 +11,11 @@ class ProjectsController < ApplicationController
     @project = Project.new(project_params)
 
     if @project.save
+      Activity.log(
+        action: 'project_created',
+        project: @project,
+        details: "Created project: #{@project.name}"
+      )
       redirect_to projects_path, notice: 'Project was successfully created.'
     else
       render :new
@@ -52,6 +57,11 @@ class ProjectsController < ApplicationController
 
     if repo_full_name.present?
       @project.update(github_repo_url: "https://github.com/#{repo_full_name}")
+      Activity.log(
+        action: 'github_connected',
+        project: @project,
+        details: "Connected GitHub repository: #{repo_full_name}"
+      )
       redirect_to dashboard_projects_page_path, notice: "Repository #{repo_full_name} connected successfully!"
     else
       @repositories = fetch_github_repos(@project.github_token)
@@ -68,6 +78,11 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
 
     if @project.update(datadog_params)
+      Activity.log(
+        action: 'datadog_connected',
+        project: @project,
+        details: "Connected Datadog monitoring (Site: #{@project.datadog_site})"
+      )
       redirect_to dashboard_projects_page_path, notice: 'Datadog connected successfully!'
     else
       render :connect_datadog

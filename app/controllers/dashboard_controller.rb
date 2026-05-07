@@ -21,6 +21,7 @@ class DashboardController < ApplicationController
 
   def activity
     @projects = Project.all
+    @activities = Activity.order(created_at: :desc).limit(100)
   end
 
   def alerts

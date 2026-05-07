@@ -1,15 +1,40 @@
 <%= render 'shared/header_sidebar' %>
     <main class="main-content" id="main-content">
         <div class="tab-content active" id="activity-tab">
-            <div class="activity-feed" id="activity-feed">
-                <div class="activity-item">
-                    <span class="activity-time">Just now</span>
-                    <span class="activity-icon">🟢</span>
-                    <span class="activity-text">System initialized and monitoring started</span>
-                </div>
-            </div>
-        </div>
+            <h2 class="section-title">📝 Activity Log</h2>
 
-        <!-- Analytics Tab -->
+            <% if @activities.any? %>
+                <div class="activity-feed" id="activity-feed">
+                    <% @activities.each do |activity| %>
+                        <div class="activity-item">
+                            <span class="activity-time"><%= time_ago_in_words(activity.created_at) %> ago</span>
+                            <span class="activity-icon">
+                                <%= case activity.action
+                                    when 'project_created' then '✨'
+                                    when 'github_authenticated' then '🔐'
+                                    when 'github_connected' then '📦'
+                                    when 'datadog_connected' then '📊'
+                                    else '🔔'
+                                    end %>
+                            </span>
+                            <span class="activity-text">
+                                <%= activity.details %>
+                                <% if activity.project %>
+                                    <span style="color: #6C757D; font-size: 0.875rem;"> - <%= activity.project.name %></span>
+                                <% end %>
+                            </span>
+                        </div>
+                    <% end %>
+                </div>
+            <% else %>
+                <div style="background: #F8F9FA; padding: 60px 40px; border-radius: 8px; text-align: center; margin-top: 30px;">
+                    <div style="font-size: 4rem; margin-bottom: 20px;">📝</div>
+                    <h3 style="color: #212529; margin: 0 0 10px 0;">No Activity Yet</h3>
+                    <p style="color: #6C757D; margin: 0;">
+                        Start using Zero Downtime to see your activity here.
+                    </p>
+                </div>
+            <% end %>
+        </div>
     </main>
 <%= javascript_include_tag "app", "data-turbo-track": "reload" %>
