@@ -15,31 +15,29 @@ class DatadogSyncErrorsService
     require 'net/http'
     require 'json'
 
-    # Datadog Error Tracking API endpoint
     site = @project.datadog_site || 'datadoghq.com'
 
-    # Try APM traces endpoint instead of logs
-    uri = URI("https://api.#{site}/api/v1/events")
+    # Use Error Tracking Issues API - this is what powers the Errors tab
+    uri = URI("https://api.#{site}/api/v2/apm/issues")
 
-    # Search for errors in the last 24 hours using epoch seconds
-    from_time = 24.hours.ago.to_i
-    to_time = Time.now.to_i
+    # Query for issues from the last 7 days
+    from_time = (7.days.ago.to_f * 1000).to_i
+    to_time = (Time.now.to_f * 1000).to_i
 
-    # Build query parameters for events API
     query_params = {
-      start: from_time,
-      end: to_time,
-      priority: "normal",
-      sources: "nagios,chef,my_app",
-      tags: "error,exception"
+      'filter[from]': from_time,
+      'filter[to]': to_time,
+      'page[limit]': 100
     }
 
     uri.query = URI.encode_www_form(query_params)
 
     puts "=" * 80
-    puts "REQUEST URL: #{uri}"
+    puts "ERROR TRACKING API REQUEST"
+    puts "URL: #{uri}"
     puts "API KEY: #{@project.datadog_api_key[0..10]}..."
     puts "APP KEY: #{@project.datadog_app_key[0..10]}..."
+    puts "Service: #{@project.datadog_site}"
     puts "=" * 80
 
     request = Net::HTTP::Get.new(uri)
@@ -48,86 +46,109 @@ class DatadogSyncErrorsService
     request['Accept'] = 'application/json'
 
     response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+      http.read_timeout = 30
       http.request(request)
     end
 
     puts "=" * 80
     puts "RESPONSE CODE: #{response.code}"
     puts "RESPONSE MESSAGE: #{response.message}"
-    puts "RESPONSE BODY: #{response.body[0..500]}"
+    puts "RESPONSE HEADERS: #{response.to_hash.inspect}"
+    puts "RESPONSE BODY (first 1000 chars):"
+    puts response.body[0..1000]
     puts "=" * 80
 
     if response.code == '200'
       data = JSON.parse(response.body)
+      issues = data['data'] || []
 
-      # For events API, the structure is different
-      events = data['events'] || []
+      puts "Found #{issues.length} error issues"
 
-      events.each do |event|
-        create_incident_from_event(event)
+      issues.each do |issue|
+        create_incident_from_issue(issue)
       end
 
       Activity.log(
         action: 'datadog_sync_completed',
         project: @project,
-        details: "Synced #{events.length} errors from Datadog"
+        details: "Synced #{issues.length} errors from Datadog Error Tracking"
       )
 
-      return { success: true, count: events.length }
+      return { success: true, count: issues.length }
     else
-      # Log the full response body for debugging
-      error_response = JSON.parse(response.body) rescue response.body
+      error_body = response.body
+      error_parsed = JSON.parse(error_body) rescue { raw: error_body }
+
+      puts "ERROR DETAILS:"
+      puts error_parsed.inspect
 
       Activity.log(
         action: 'datadog_sync_failed',
         project: @project,
-        details: "Failed to sync errors: #{response.code} - #{error_response}"
+        details: "Failed to sync: #{response.code} - #{error_parsed['errors']&.first || error_body[0..200]}"
       )
 
-      return { success: false, error: "#{response.code} - #{error_response}" }
+      return { success: false, error: "#{response.code} - #{error_parsed['errors']&.first&.dig('detail') || error_body[0..200]}" }
     end
   rescue StandardError => e
+    puts "EXCEPTION: #{e.class} - #{e.message}"
+    puts e.backtrace.first(5).join("\n")
+
     Activity.log(
       action: 'datadog_sync_error',
       project: @project,
-      details: "Error syncing Datadog: #{e.message}"
+      details: "Error: #{e.message}"
     )
 
     return { success: false, error: e.message }
   end
 
-  def create_incident_from_event(event)
-    # Check if we already have this error
-    datadog_id = event['id']&.to_s || "event-#{event['date_happened']}"
+  def create_incident_from_issue(issue)
+    attributes = issue['attributes'] || {}
+    issue_id = issue['id']
 
-    existing = Incident.find_by(datadog_id: datadog_id, project: @project)
-    return if existing
+    existing = Incident.find_by(datadog_id: issue_id, project: @project)
 
-    # Create new incident from event
-    Incident.create(
+    if existing
+      existing.update(last_synced_at: Time.now)
+      return
+    end
+
+    # Extract error details
+    title = attributes['title'] || 'Unknown Error'
+    message = attributes['message'] || attributes['title'] || ''
+    stack_trace = attributes['stack_trace'] || ''
+
+    Incident.create!(
       project: @project,
-      datadog_id: datadog_id,
-      title: event['title'] || 'Unknown Error',
-      severity: map_priority(event['priority']),
+      datadog_id: issue_id,
+      title: title.truncate(255),
+      severity: map_severity_from_issue(attributes),
       status: 'open',
-      error_message: event['text'],
-      stack_trace: event['text'],
-      service: event['tags']&.first || 'unknown',
-      source: event['source'] || 'datadog',
+      error_message: message,
+      stack_trace: stack_trace,
+      service: attributes['service'] || 'unknown',
+      source: attributes['resource'] || 'datadog-apm',
       last_synced_at: Time.now
     )
+
+    puts "Created incident: #{title[0..50]}"
+  rescue => e
+    puts "Failed to create incident: #{e.message}"
+    Rails.logger.error "Failed to create incident from issue #{issue_id}: #{e.message}"
   end
 
-  def map_priority(priority)
-    case priority&.downcase
-    when 'critical', 'urgent'
+  def map_severity_from_issue(attributes)
+    # APM issues don't have severity, use impact or error count
+    impact = attributes['impact']
+    error_count = attributes['error_count'] || 0
+
+    if error_count > 100
       'critical'
-    when 'high', 'error'
+    elsif error_count > 10
       'high'
-    when 'normal', 'warning'
-      'medium'
     else
-      'low'
+      'medium'
     end
   end
 
