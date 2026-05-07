@@ -1,0 +1,58 @@
+<div style="max-width: 800px; margin: 50px auto; padding: 20px;">
+  <h1 style="color: #00A3E0; font-size: 2rem; margin-bottom: 1rem;">
+    Connect GitHub Repository
+  </h1>
+
+  <p style="color: #6C757D; margin-bottom: 2rem;">
+    Connect a GitHub repository to <strong><%= @project.name %></strong>
+  </p>
+
+  <%= form_with url: "#", method: :post, local: true, html: { style: "background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);" } do |form| %>
+
+    <!-- Repository URL Field -->
+    <div style="margin-bottom: 20px;">
+      <%= form.label :repository_url, "GitHub Repository URL *", style: "display: block; font-weight: 600; color: #212529; margin-bottom: 8px;" %>
+      <%= form.text_field :repository_url, placeholder: "https://github.com/username/repository", style: "width: 100%; padding: 12px; border: 1px solid #DEE2E6; border-radius: 4px; font-size: 14px;" %>
+      <small style="color: #6C757D; font-size: 0.875rem;">Example: https://github.com/rahul8sharma/zero-downtime</small>
+    </div>
+
+    <!-- Branch Field -->
+    <div style="margin-bottom: 20px;">
+      <%= form.label :branch, "Branch", style: "display: block; font-weight: 600; color: #212529; margin-bottom: 8px;" %>
+      <%= form.text_field :branch, placeholder: "main", value: "main", style: "width: 100%; padding: 12px; border: 1px solid #DEE2E6; border-radius: 4px; font-size: 14px;" %>
+    </div>
+
+    <!-- Access Token Field -->
+    <div style="margin-bottom: 20px;">
+      <%= form.label :access_token, "GitHub Personal Access Token", style: "display: block; font-weight: 600; color: #212529; margin-bottom: 8px;" %>
+      <%= form.password_field :access_token, placeholder: "ghp_xxxxxxxxxxxxxxxxxxxx", style: "width: 100%; padding: 12px; border: 1px solid #DEE2E6; border-radius: 4px; font-size: 14px;" %>
+      <small style="color: #6C757D; font-size: 0.875rem;">
+        Optional. Required for private repositories.
+        <%= link_to "Generate token", "https://github.com/settings/tokens/new", target: "_blank", style: "color: #00A3E0; text-decoration: none;" %>
+      </small>
+    </div>
+
+    <!-- Auto Create PR Checkbox -->
+    <div style="margin-bottom: 30px;">
+      <%= form.check_box :auto_create_pr, style: "margin-right: 8px;" %>
+      <%= form.label :auto_create_pr, "Automatically create pull requests for AI-generated fixes", style: "font-weight: normal; color: #495057;" %>
+    </div>
+
+    <!-- Submit Button -->
+    <div style="display: flex; gap: 10px;">
+      <%= form.submit "Connect Repository", style: "background: #00A3E0; color: white; padding: 12px 24px; border: none; border-radius: 4px; font-size: 16px; font-weight: 600; cursor: pointer;" %>
+      <%= link_to "Cancel", dashboard_projects_page_path, style: "background: #6C757D; color: white; padding: 12px 24px; border: none; border-radius: 4px; font-size: 16px; font-weight: 600; text-decoration: none; display: inline-block;" %>
+    </div>
+
+  <% end %>
+
+  <div style="margin-top: 30px; padding: 20px; background: #F8F9FA; border-left: 4px solid #00A3E0; border-radius: 4px;">
+    <h3 style="color: #212529; margin-bottom: 10px;">What happens after connecting?</h3>
+    <ul style="color: #495057; line-height: 1.8;">
+      <li>✅ Zero Downtime will monitor errors from this repository</li>
+      <li>✅ AI-generated code fixes will be submitted as pull requests</li>
+      <li>✅ PRs will be automatically assigned to available team members</li>
+      <li>✅ You'll receive notifications when fixes are deployed</li>
+    </ul>
+  </div>
+</div>

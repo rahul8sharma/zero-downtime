@@ -23,10 +23,14 @@
                             <p style="color: #6C757D; margin: 0 0 15px 0; line-height: 1.6;">
                                 <%= project.description.present? ? project.description : "No description provided" %>
                             </p>
-                            <div style="padding-top: 15px; border-top: 1px solid #DEE2E6;">
+                            <div style="padding-top: 15px; border-top: 1px solid #DEE2E6; display: flex; justify-content: space-between; align-items: center;">
                                 <span style="color: #6C757D; font-size: 0.875rem;">
                                     Created <%= time_ago_in_words(project.created_at) %> ago
                                 </span>
+                                <%= link_to connect_github_project_path(project), style: "background: #00A3E0; color: white; padding: 8px 16px; border-radius: 4px; text-decoration: none; font-size: 0.875rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;" do %>
+                                    <span>🔗</span>
+                                    Connect GitHub
+                                <% end %>
                             </div>
                         </div>
                     <% end %>

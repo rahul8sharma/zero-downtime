@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
   # Projects routes
-  resources :projects, only: [:index, :new, :create]
+  resources :projects, only: [:index, :new, :create] do
+    member do
+      get 'connect_github'
+    end
+  end
 
   # Home controller routes
   get 'home/new'

@@ -17,6 +17,10 @@ class ProjectsController < ApplicationController
     end
   end
 
+  def connect_github
+    @project = Project.find(params[:id])
+  end
+
   private
 
   def project_params
