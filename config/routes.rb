@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  # Home controller routes
+  get 'home/new'
+  post 'home/submit'
+
+  # Dashboard routes
   root 'dashboard#index'
   get 'dashboard/index'
 

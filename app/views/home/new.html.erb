@@ -1,0 +1,107 @@
+<div style="max-width: 800px; margin: 50px auto; padding: 20px;">
+  <h1 style="color: #00A3E0; font-size: 2rem; margin-bottom: 1rem;">
+    Contact Zero Downtime Team
+  </h1>
+
+  <p style="color: #6C757D; margin-bottom: 2rem;">
+    Interested in learning more about Zero Downtime? Fill out the form below and we'll get back to you.
+  </p>
+
+  <%= form_with url: home_submit_path, method: :post, local: true, html: { style: "background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);" } do |form| %>
+
+    <!-- Name Field -->
+    <div style="margin-bottom: 20px;">
+      <%= form.label :name, "Full Name *", style: "display: block; font-weight: 600; color: #212529; margin-bottom: 8px;" %>
+      <%= form.text_field :name, placeholder: "Enter your full name", style: "width: 100%; padding: 12px; border: 1px solid #DEE2E6; border-radius: 4px; font-size: 14px;" %>
+    </div>
+
+    <!-- Email Field -->
+    <div style="margin-bottom: 20px;">
+      <%= form.label :email, "Email Address *", style: "display: block; font-weight: 600; color: #212529; margin-bottom: 8px;" %>
+      <%= form.email_field :email, placeholder: "your.email@symplr.com", style: "width: 100%; padding: 12px; border: 1px solid #DEE2E6; border-radius: 4px; font-size: 14px;" %>
+    </div>
+
+    <!-- Platform Selection -->
+    <div style="margin-bottom: 20px;">
+      <%= form.label :platform, "Current Observability Platform", style: "display: block; font-weight: 600; color: #212529; margin-bottom: 8px;" %>
+      <%= form.select :platform,
+          [
+            ["Select platform", ""],
+            ["Datadog", "datadog"],
+            ["AWS CloudWatch", "cloudwatch"],
+            ["Rollbar", "rollbar"],
+            ["New Relic", "newrelic"],
+            ["Sentry", "sentry"],
+            ["Other", "other"]
+          ],
+          {},
+          style: "width: 100%; padding: 12px; border: 1px solid #DEE2E6; border-radius: 4px; font-size: 14px;"
+      %>
+    </div>
+
+    <!-- Message Field -->
+    <div style="margin-bottom: 20px;">
+      <%= form.label :message, "Message", style: "display: block; font-weight: 600; color: #212529; margin-bottom: 8px;" %>
+      <%= form.text_area :message, rows: 5, placeholder: "Tell us about your DevOps challenges...", style: "width: 100%; padding: 12px; border: 1px solid #DEE2E6; border-radius: 4px; font-size: 14px; resize: vertical;" %>
+    </div>
+
+    <!-- Team Interest -->
+    <div style="margin-bottom: 20px;">
+      <%= form.label :team_size, "Team Size", style: "display: block; font-weight: 600; color: #212529; margin-bottom: 8px;" %>
+      <%= form.select :team_size,
+          [
+            ["Select team size", ""],
+            ["1-10 developers", "small"],
+            ["11-50 developers", "medium"],
+            ["51-100 developers", "large"],
+            ["100+ developers", "enterprise"]
+          ],
+          {},
+          style: "width: 100%; padding: 12px; border: 1px solid #DEE2E6; border-radius: 4px; font-size: 14px;"
+      %>
+    </div>
+
+    <!-- Interest Level -->
+    <div style="margin-bottom: 30px;">
+      <%= form.label :interest, "I'm interested in:", style: "display: block; font-weight: 600; color: #212529; margin-bottom: 8px;" %>
+
+      <div style="margin-bottom: 8px;">
+        <%= form.check_box :demo, style: "margin-right: 8px;" %>
+        <%= form.label :demo, "Schedule a demo", style: "font-weight: normal; color: #495057;" %>
+      </div>
+
+      <div style="margin-bottom: 8px;">
+        <%= form.check_box :pilot, style: "margin-right: 8px;" %>
+        <%= form.label :pilot, "Pilot with my team", style: "font-weight: normal; color: #495057;" %>
+      </div>
+
+      <div style="margin-bottom: 8px;">
+        <%= form.check_box :pricing, style: "margin-right: 8px;" %>
+        <%= form.label :pricing, "Pricing information", style: "font-weight: normal; color: #495057;" %>
+      </div>
+
+      <div style="margin-bottom: 8px;">
+        <%= form.check_box :integration, style: "margin-right: 8px;" %>
+        <%= form.label :integration, "Technical integration details", style: "font-weight: normal; color: #495057;" %>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div style="display: flex; gap: 10px;">
+      <%= form.submit "Submit Request", style: "background: #00A3E0; color: white; padding: 12px 24px; border: none; border-radius: 4px; font-size: 16px; font-weight: 600; cursor: pointer;" %>
+      <%= link_to "Back to Dashboard", root_path, style: "background: #6C757D; color: white; padding: 12px 24px; border: none; border-radius: 4px; font-size: 16px; font-weight: 600; text-decoration: none; display: inline-block;" %>
+    </div>
+
+  <% end %>
+
+  <div style="margin-top: 30px; padding: 20px; background: #F8F9FA; border-left: 4px solid #00A3E0; border-radius: 4px;">
+    <h3 style="color: #212529; margin-bottom: 10px;">Why Choose Zero Downtime?</h3>
+    <ul style="color: #495057; line-height: 1.8;">
+      <li>✅ 90% faster incident response (15 min vs 2-4 hours)</li>
+      <li>✅ Unified logs across 5+ observability platforms</li>
+      <li>✅ AI-powered code fix generation</li>
+      <li>✅ Automatic PR creation and assignment</li>
+      <li>✅ $117K+ annual savings per team</li>
+    </ul>
+  </div>
+</div>
