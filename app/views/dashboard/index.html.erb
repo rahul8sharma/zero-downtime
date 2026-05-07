@@ -56,11 +56,14 @@
                     <span class="sidebar-icon">📊</span>
                     <span class="sidebar-label">Dashboard</span>
                 <% end %>
-                <a href="#" class="sidebar-item" onclick="switchTab('incidents')">
+                <%= link_to dashboard_incidents_path, class: "sidebar-item #{action_name == 'incidents' ? 'active' : ''}" do %>
                     <span class="sidebar-icon">🔥</span>
                     <span class="sidebar-label">Live Incidents</span>
-                    <span class="sidebar-badge">6</span>
-                </a>
+                    <% total_incidents = Incident.where(status: 'open').count %>
+                    <% if total_incidents > 0 %>
+                        <span class="sidebar-badge"><%= total_incidents %></span>
+                    <% end %>
+                <% end %>
                 <%= link_to dashboard_analytics_path, class: "sidebar-item #{action_name == 'analytics' ? 'active' : ''}" do %>
                     <span class="sidebar-icon">📈</span>
                     <span class="sidebar-label">Analytics</span>
