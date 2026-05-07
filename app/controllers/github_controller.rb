@@ -14,7 +14,7 @@ class GithubController < ApplicationController
         # Get user info
         user_info = get_github_user(token_response['access_token'])
 
-        # Update project with GitHub data
+        # Update project with GitHub data (but not repo yet)
         project = Project.find(project_id)
         project.update(
           github_uid: user_info['id'].to_s,
@@ -22,14 +22,14 @@ class GithubController < ApplicationController
           github_username: user_info['login']
         )
 
-        # Clear session
-        session.delete(:github_project_id)
-
-        redirect_to dashboard_projects_page_path, notice: "GitHub connected successfully! (@#{user_info['login']})"
+        # Redirect to repo selection page
+        redirect_to select_repo_project_path(project)
       else
+        session.delete(:github_project_id)
         redirect_to dashboard_projects_page_path, alert: 'Failed to get access token from GitHub.'
       end
     else
+      session.delete(:github_project_id)
       redirect_to dashboard_projects_page_path, alert: 'Failed to connect GitHub. Missing authorization code.'
     end
   end

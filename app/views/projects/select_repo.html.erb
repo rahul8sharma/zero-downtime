@@ -1,0 +1,84 @@
+<div style="max-width: 900px; margin: 50px auto; padding: 20px;">
+  <h1 style="color: #00A3E0; font-size: 2rem; margin-bottom: 1rem;">
+    Select Repository
+  </h1>
+
+  <p style="color: #6C757D; margin-bottom: 2rem;">
+    Choose a repository to integrate with <strong><%= @project.name %></strong>
+  </p>
+
+  <% if flash[:alert] %>
+    <div style="background: #F8D7DA; color: #721C24; padding: 15px; border-radius: 4px; margin-bottom: 20px;">
+      <%= flash[:alert] %>
+    </div>
+  <% end %>
+
+  <%= form_with url: save_repo_project_path(@project), method: :post, local: true, html: { style: "background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);" } do |form| %>
+
+    <div style="margin-bottom: 20px;">
+      <label style="display: block; font-weight: 600; color: #212529; margin-bottom: 12px;">
+        Connected as: <span style="color: #00A3E0;">@<%= @project.github_username %></span>
+      </label>
+    </div>
+
+    <% if @repositories.any? %>
+      <div style="margin-bottom: 30px;">
+        <label style="display: block; font-weight: 600; color: #212529; margin-bottom: 12px;">
+          Select Repository *
+        </label>
+        
+        <div style="max-height: 400px; overflow-y: auto; border: 1px solid #DEE2E6; border-radius: 4px;">
+          <% @repositories.each do |repo| %>
+            <label style="display: flex; align-items: center; padding: 12px 16px; border-bottom: 1px solid #F1F3F5; cursor: pointer; transition: background 0.2s;" 
+                   onmouseover="this.style.background='#F8F9FA'" 
+                   onmouseout="this.style.background='white'">
+              <input type="radio" 
+                     name="repository" 
+                     value="<%= repo['full_name'] %>" 
+                     style="margin-right: 12px; cursor: pointer;">
+              <div style="flex: 1;">
+                <div style="font-weight: 600; color: #212529; margin-bottom: 4px;">
+                  <%= repo['full_name'] %>
+                </div>
+                <div style="font-size: 0.875rem; color: #6C757D;">
+                  <% if repo['description'].present? %>
+                    <%= repo['description'] %>
+                  <% else %>
+                    No description
+                  <% end %>
+                </div>
+                <div style="margin-top: 6px; display: flex; gap: 12px; font-size: 0.75rem; color: #6C757D;">
+                  <span>⭐ <%= repo['stargazers_count'] %></span>
+                  <span>🔀 <%= repo['forks_count'] %></span>
+                  <% if repo['language'].present? %>
+                    <span>📝 <%= repo['language'] %></span>
+                  <% end %>
+                  <span><%= repo['private'] ? '🔒 Private' : '🌍 Public' %></span>
+                </div>
+              </div>
+            </label>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div style="display: flex; gap: 10px;">
+        <%= form.submit "Connect Repository", style: "background: #00A3E0; color: white; padding: 12px 24px; border: none; border-radius: 4px; font-size: 16px; font-weight: 600; cursor: pointer;" %>
+        <%= link_to "Cancel", dashboard_projects_page_path, style: "background: #6C757D; color: white; padding: 12px 24px; border: none; border-radius: 4px; font-size: 16px; font-weight: 600; text-decoration: none; display: inline-block;" %>
+      </div>
+    <% else %>
+      <div style="padding: 40px; text-align: center; background: #F8F9FA; border-radius: 8px;">
+        <div style="font-size: 3rem; margin-bottom: 16px;">📁</div>
+        <h3 style="color: #212529; margin: 0 0 8px 0;">No Repositories Found</h3>
+        <p style="color: #6C757D; margin: 0;">
+          No repositories found for @<%= @project.github_username %>
+        </p>
+      </div>
+      
+      <div style="margin-top: 20px;">
+        <%= link_to "Back to Projects", dashboard_projects_page_path, style: "background: #6C757D; color: white; padding: 12px 24px; border: none; border-radius: 4px; font-size: 16px; font-weight: 600; text-decoration: none; display: inline-block;" %>
+      </div>
+    <% end %>
+
+  <% end %>
+</div>

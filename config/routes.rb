@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   resources :projects, only: [:index, :new, :create] do
     member do
       get 'connect_github'
+      get 'select_repo'
+      post 'save_repo'
     end
   end
 

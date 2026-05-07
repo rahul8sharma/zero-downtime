@@ -36,7 +36,57 @@ class ProjectsController < ApplicationController
     redirect_to github_url, allow_other_host: true
   end
 
+  def select_repo
+    @project = Project.find(params[:id])
+
+    # Fetch repositories from GitHub
+    @repositories = fetch_github_repos(@project.github_token)
+
+    # Clear session
+    session.delete(:github_project_id)
+  end
+
+  def save_repo
+    @project = Project.find(params[:id])
+    repo_full_name = params[:repository]
+
+    if repo_full_name.present?
+      @project.update(github_repo_url: "https://github.com/#{repo_full_name}")
+      redirect_to dashboard_projects_page_path, notice: "Repository #{repo_full_name} connected successfully!"
+    else
+      @repositories = fetch_github_repos(@project.github_token)
+      flash.now[:alert] = 'Please select a repository'
+      render :select_repo
+    end
+  end
+
   private
+
+  def fetch_github_repos(token)
+    require 'net/http'
+    require 'json'
+
+    uri = URI('https://api.github.com/user/repos')
+    uri.query = URI.encode_www_form(
+      sort: 'updated',
+      per_page: 100,
+      type: 'all'
+    )
+
+    request = Net::HTTP::Get.new(uri)
+    request['Authorization'] = "token #{token}"
+    request['Accept'] = 'application/vnd.github.v3+json'
+
+    response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+      http.request(request)
+    end
+
+    if response.code == '200'
+      JSON.parse(response.body)
+    else
+      []
+    end
+  end
 
   def project_params
     params.require(:project).permit(:name, :description)
