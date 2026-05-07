@@ -5,6 +5,8 @@ Rails.application.routes.draw do
       get 'connect_github'
       get 'select_repo'
       post 'save_repo'
+      get 'connect_datadog'
+      post 'save_datadog'
     end
   end
 

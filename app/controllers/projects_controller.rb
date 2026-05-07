@@ -60,6 +60,20 @@ class ProjectsController < ApplicationController
     end
   end
 
+  def connect_datadog
+    @project = Project.find(params[:id])
+  end
+
+  def save_datadog
+    @project = Project.find(params[:id])
+
+    if @project.update(datadog_params)
+      redirect_to dashboard_projects_page_path, notice: 'Datadog connected successfully!'
+    else
+      render :connect_datadog
+    end
+  end
+
   private
 
   def fetch_github_repos(token)
@@ -90,5 +104,9 @@ class ProjectsController < ApplicationController
 
   def project_params
     params.require(:project).permit(:name, :description)
+  end
+
+  def datadog_params
+    params.require(:project).permit(:datadog_api_key, :datadog_app_key, :datadog_site)
   end
 end

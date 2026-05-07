@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_05_07_123311) do
+ActiveRecord::Schema[7.1].define(version: 2026_05_07_131306) do
   create_table "projects", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -20,6 +20,9 @@ ActiveRecord::Schema[7.1].define(version: 2026_05_07_123311) do
     t.string "github_token"
     t.string "github_repo_url"
     t.string "github_username"
+    t.string "datadog_api_key"
+    t.string "datadog_app_key"
+    t.string "datadog_site"
   end
 
 end
