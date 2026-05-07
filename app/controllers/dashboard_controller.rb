@@ -67,16 +67,29 @@ class DashboardController < ApplicationController
       return
     end
 
-    @projects.each do |project|
-      DatadogSyncErrorsJob.perform_later(project.id)
-    end
-
     Activity.log(
       action: 'datadog_sync_started',
       project: nil,
       details: "Started syncing errors from Datadog for #{@projects.count} project(s)"
     )
 
-    redirect_to dashboard_incidents_path, notice: "Syncing errors from Datadog in background for #{@projects.count} project(s)..."
+    total_synced = 0
+    errors = []
+
+    @projects.each do |project|
+      result = DatadogSyncErrorsService.new(project).perform
+
+      if result[:success]
+        total_synced += result[:count]
+      else
+        errors << "#{project.name}: #{result[:error]}"
+      end
+    end
+
+    if errors.any?
+      redirect_to dashboard_incidents_path, alert: "Sync completed with errors: #{errors.join(', ')}"
+    else
+      redirect_to dashboard_incidents_path, notice: "Successfully synced #{total_synced} errors from Datadog!"
+    end
   end
 end
