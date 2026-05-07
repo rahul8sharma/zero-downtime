@@ -2,3 +2,8 @@
 # GitHub OAuth
 GITHUB_CLIENT_ID: Ov23licaaXRMeyGlW0Rg
 GITHUB_CLIENT_SECRET: 27c5a4119d4be6a313328b6c5963e8fea50de808
+
+# Datadog Configuration
+DD_API_KEY: your_datadog_api_key_here
+DD_AGENT_HOST: 127.0.0.1
+DD_AGENT_PORT: 8126
