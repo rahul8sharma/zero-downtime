@@ -23,8 +23,17 @@ class ProjectsController < ApplicationController
     # Store project ID in session for callback
     session[:github_project_id] = @project.id
 
-    # Redirect to GitHub OAuth
-    redirect_to '/auth/github', allow_other_host: true
+    # Build GitHub OAuth URL manually
+    client_id = ENV['GITHUB_CLIENT_ID']
+    redirect_uri = "#{request.base_url}/auth/github/callback"
+    scope = 'repo,read:user,user:email'
+
+    github_url = "https://github.com/login/oauth/authorize?" \
+                 "client_id=#{client_id}" \
+                 "&redirect_uri=#{CGI.escape(redirect_uri)}" \
+                 "&scope=#{CGI.escape(scope)}"
+
+    redirect_to github_url, allow_other_host: true
   end
 
   private
