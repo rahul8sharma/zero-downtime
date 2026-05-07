@@ -1,0 +1,142 @@
+<%= render 'shared/header_sidebar' %>
+
+    <!-- Main Content -->
+    <main class="main-content" id="main-content">
+        <div class="tab-content" id="alert-rules-tab">
+            <div class="alert-rules-header">
+                <h2 class="section-title">📋 Alert Rules Management</h2>
+                <button class="btn btn-primary" onclick="openCreateAlertRule()">
+                    <span>➕</span> Create New Alert Rule
+                </button>
+            </div>
+
+            <div class="alert-rules-info">
+                <div class="info-banner">
+                    <span class="info-icon">💡</span>
+                    <div>
+                        <strong>Unified Alert Management</strong>
+                        <p>Create alert rules once and automatically apply them across all observability platforms (Datadog, Rollbar, New Relic, Sentry) for all your projects.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert-rules-list">
+                <div class="alert-rule-card">
+                    <div class="alert-rule-header">
+                        <div>
+                            <h3>🚨 Critical: API Response Time</h3>
+                            <span class="rule-badge critical">Critical</span>
+                            <span class="rule-badge active">Active</span>
+                        </div>
+                        <button class="btn btn-secondary btn-sm" onclick="editAlertRule('api-response')">Edit</button>
+                    </div>
+                    <div class="alert-rule-body">
+                        <div class="rule-condition">
+                            <strong>Condition:</strong> Response time > 1000ms for 5 consecutive minutes
+                        </div>
+                        <div class="rule-platforms">
+                            <strong>Applied to:</strong>
+                            <span class="platform-tag">📊 Datadog</span>
+                            <span class="platform-tag">☁️ CloudWatch</span>
+                            <span class="platform-tag">📈 New Relic</span>
+                        </div>
+                        <div class="rule-projects">
+                            <strong>Projects:</strong> All Projects (3)
+                        </div>
+                    </div>
+                    <div class="alert-rule-footer">
+                        <span class="rule-meta">Created: 2 weeks ago</span>
+                        <span class="rule-meta">Triggered: 12 times</span>
+                    </div>
+                </div>
+
+                <div class="alert-rule-card">
+                    <div class="alert-rule-header">
+                        <div>
+                            <h3>⚠️ Warning: High Memory Usage</h3>
+                            <span class="rule-badge warning">Warning</span>
+                            <span class="rule-badge active">Active</span>
+                        </div>
+                        <button class="btn btn-secondary btn-sm" onclick="editAlertRule('memory-usage')">Edit</button>
+                    </div>
+                    <div class="alert-rule-body">
+                        <div class="rule-condition">
+                            <strong>Condition:</strong> Memory usage > 80% for 10 minutes
+                        </div>
+                        <div class="rule-platforms">
+                            <strong>Applied to:</strong>
+                            <span class="platform-tag">📊 Datadog</span>
+                        </div>
+                        <div class="rule-projects">
+                            <strong>Projects:</strong> GRC Spend Management, Workforce Solutions
+                        </div>
+                    </div>
+                    <div class="alert-rule-footer">
+                        <span class="rule-meta">Created: 1 month ago</span>
+                        <span class="rule-meta">Triggered: 8 times</span>
+                    </div>
+                </div>
+
+                <div class="alert-rule-card">
+                    <div class="alert-rule-header">
+                        <div>
+                            <h3>🐛 Error: Unhandled Exceptions</h3>
+                            <span class="rule-badge high">High</span>
+                            <span class="rule-badge active">Active</span>
+                        </div>
+                        <button class="btn btn-secondary btn-sm" onclick="editAlertRule('exceptions')">Edit</button>
+                    </div>
+                    <div class="alert-rule-body">
+                        <div class="rule-condition">
+                            <strong>Condition:</strong> More than 10 unhandled exceptions in 5 minutes
+                        </div>
+                        <div class="rule-platforms">
+                            <strong>Applied to:</strong>
+                            <span class="platform-tag">🐛 Rollbar</span>
+                            <span class="platform-tag">🔍 Sentry</span>
+                        </div>
+                        <div class="rule-projects">
+                            <strong>Projects:</strong> All Projects (3)
+                        </div>
+                    </div>
+                    <div class="alert-rule-footer">
+                        <span class="rule-meta">Created: 3 weeks ago</span>
+                        <span class="rule-meta">Triggered: 24 times</span>
+                    </div>
+                </div>
+
+                <div class="alert-rule-card">
+                    <div class="alert-rule-header">
+                        <div>
+                            <h3>📉 Info: Database Query Performance</h3>
+                            <span class="rule-badge info">Info</span>
+                            <span class="rule-badge active">Active</span>
+                        </div>
+                        <button class="btn btn-secondary btn-sm" onclick="editAlertRule('db-query')">Edit</button>
+                    </div>
+                    <div class="alert-rule-body">
+                        <div class="rule-condition">
+                            <strong>Condition:</strong> Query execution time > 500ms
+                        </div>
+                        <div class="rule-platforms">
+                            <strong>Applied to:</strong>
+                            <span class="platform-tag">📊 Datadog</span>
+                            <span class="platform-tag">☁️ CloudWatch</span>
+                            <span class="platform-tag">📈 New Relic</span>
+                        </div>
+                        <div class="rule-projects">
+                            <strong>Projects:</strong> GRC Spend Management
+                        </div>
+                    </div>
+                    <div class="alert-rule-footer">
+                        <span class="rule-meta">Created: 5 days ago</span>
+                        <span class="rule-meta">Triggered: 45 times</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Tab -->
+    </main>
+
+<%= javascript_include_tag "app", "data-turbo-track": "reload" %>

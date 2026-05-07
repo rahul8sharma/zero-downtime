@@ -1,0 +1,42 @@
+<<div style="max-width: 800px; margin: 50px auto; padding: 20px;">
+  <h1 style="color: #00A3E0; font-size: 2rem; margin-bottom: 1rem;">
+    Create New Project
+  </h1>
+
+  <p style="color: #6C757D; margin-bottom: 2rem;">
+    Add a new project to Zero Downtime system.
+  </p>
+
+  <%= form_with model: @project, local: true, html: { style: "background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);" } do |form| %>
+
+    <% if @project.errors.any? %>
+      <div style="background: #F8D7DA; color: #721C24; padding: 15px; border-radius: 4px; margin-bottom: 20px;">
+        <h3 style="margin: 0 0 10px 0;">Error:</h3>
+        <ul style="margin: 0; padding-left: 20px;">
+          <% @project.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <!-- Name Field -->
+    <div style="margin-bottom: 20px;">
+      <%= form.label :name, "Project Name *", style: "display: block; font-weight: 600; color: #212529; margin-bottom: 8px;" %>
+      <%= form.text_field :name, placeholder: "Enter project name", style: "width: 100%; padding: 12px; border: 1px solid #DEE2E6; border-radius: 4px; font-size: 14px;" %>
+    </div>
+
+    <!-- Description Field -->
+    <div style="margin-bottom: 20px;">
+      <%= form.label :description, "Description", style: "display: block; font-weight: 600; color: #212529; margin-bottom: 8px;" %>
+      <%= form.text_area :description, rows: 5, placeholder: "Enter project description...", style: "width: 100%; padding: 12px; border: 1px solid #DEE2E6; border-radius: 4px; font-size: 14px; resize: vertical;" %>
+    </div>
+
+    <!-- Submit Button -->
+    <div style="display: flex; gap: 10px;">
+      <%= form.submit "Create Project", style: "background: #00A3E0; color: white; padding: 12px 24px; border: none; border-radius: 4px; font-size: 16px; font-weight: 600; cursor: pointer;" %>
+      <%= link_to "Back to Projects", projects_path, style: "background: #6C757D; color: white; padding: 12px 24px; border: none; border-radius: 4px; font-size: 16px; font-weight: 600; text-decoration: none; display: inline-block;" %>
+    </div>
+
+  <% end %>
+</div>

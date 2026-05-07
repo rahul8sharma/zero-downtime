@@ -1,0 +1,116 @@
+<%= render 'shared/header_sidebar' %>
+    <main class="main-content" id="main-content">
+        <div class="tab-content" id="settings-tab">
+            <h2 class="section-title">⚙️ Settings & Configuration</h2>
+
+            <div class="settings-sections">
+                <div class="settings-card">
+                    <h3>🔔 Notification Preferences</h3>
+                    <div class="settings-group">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label>Critical Alerts</label>
+                                <p>Receive immediate notifications for critical incidents</p>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label>Email Digests</label>
+                                <p>Daily summary of incidents and fixes</p>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label>Teams Notifications</label>
+                                <p>Send updates to Microsoft Teams</p>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <h3>🤖 AI Configuration</h3>
+                    <div class="settings-group">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label>Auto-Fix Threshold</label>
+                                <p>Minimum confidence level for automatic fixes</p>
+                            </div>
+                            <div class="setting-value">
+                                <input type="range" min="50" max="95" value="80" class="slider">
+                                <span class="setting-number">80%</span>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label>Auto-Assign PRs</label>
+                                <p>Automatically assign PRs to available developers</p>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <h3>🔐 Security & Access</h3>
+                    <div class="settings-group">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label>Two-Factor Authentication</label>
+                                <p>Add an extra layer of security</p>
+                            </div>
+                            <button class="btn btn-secondary btn-sm">Enable</button>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label>API Keys</label>
+                                <p>Manage API access tokens</p>
+                            </div>
+                            <button class="btn btn-secondary btn-sm">Manage</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Demo Modal -->
+    <div class="modal" id="demo-modal">
+        <div class="modal-overlay" onclick="closeModal()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🎬 Live Demo: Zero Downtime</h2>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-description">Watch as the AI system detects an issue, analyzes it, creates a fix, and assigns it to an available developer.</p>
+
+                <div class="demo-steps" id="demo-steps">
+                    <div class="demo-step" data-step="1">
+                        <span class="step-num">1</span>
+                        <div class="step-content">
+                            <span class="step-title">Detecting Issue</span>
+                            <span class="step-desc">Monitoring logs and error reports...</span>
+                        </div>
+                        <span class="step-status">⏳</span>
+                    </div>
+                    <div class="demo-step" data-step="2">
+                        <span class="step-num">2</span>
+                        <div class="step-content">
+    </main>
+<%= javascript_include_tag "app", "data-turbo-track": "reload" %>

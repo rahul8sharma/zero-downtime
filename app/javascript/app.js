@@ -141,6 +141,8 @@ function switchTab(tabName) {
 // Render Dashboard Incidents
 function renderDashboardIncidents() {
     const container = document.getElementById('dashboard-incidents');
+    if (!container) return; // Guard clause - element doesn't exist on this page
+
     const criticalIncidents = incidents.filter(inc => inc.severity === 'critical' || inc.severity === 'high').slice(0, 5);
 
     if (criticalIncidents.length === 0) {
@@ -169,6 +171,8 @@ function renderDashboardIncidents() {
 // Render Incidents List
 function renderIncidentsList() {
     const container = document.getElementById('incidents-list');
+    if (!container) return; // Guard clause - element doesn't exist on this page
+
     const filteredIncidents = filterIncidentsByType(currentFilter);
 
     if (filteredIncidents.length === 0) {
@@ -352,6 +356,8 @@ function startActivityFeed() {
 
 function addActivity(icon, text) {
     const feed = document.getElementById('activity-feed');
+    if (!feed) return; // Guard clause - element doesn't exist on this page
+
     const item = document.createElement('div');
     item.className = 'activity-item';
     item.innerHTML = `
@@ -365,6 +371,7 @@ function addActivity(icon, text) {
 
 function clearActivity() {
     const feed = document.getElementById('activity-feed');
+    if (!feed) return; // Guard clause - element doesn't exist on this page
     feed.innerHTML = '<div class="activity-item"><span class="activity-time">Just now</span><span class="activity-icon">🟢</span><span class="activity-text">Activity feed cleared</span></div>';
     activityCount = 1;
 }
@@ -1091,6 +1098,8 @@ function searchLogs(event) {
 
 function renderLogsTable() {
     const tbody = document.getElementById('logs-table-body');
+    if (!tbody) return; // Guard clause - element doesn't exist on this page
+
     tbody.innerHTML = '';
 
     currentLogs.forEach(log => {

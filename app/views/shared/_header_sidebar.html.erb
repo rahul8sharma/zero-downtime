@@ -1,0 +1,118 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <%= image_tag "symplr-logo.svg", alt: "symplr", class: "logo-img" %>
+                <div class="logo-divider"></div>
+                <div class="logo-text">
+                    <h1>Zero Downtime</h1>
+                    <p>AI-Powered DevOps Automation Platform</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <div class="project-selector">
+                    <label for="project-select">Project:</label>
+                    <select id="project-select" onchange="switchProject(this.value)">
+                        <option value="all">All Projects</option>
+                        <% @projects.each_with_index do |project, index| %>
+                          <option value="<%= project.id %>" <%= 'selected' if index == 0 %>><%= project.name %></option>
+                        <% end %>
+                    </select>
+                    <%= link_to new_project_path, class: "btn btn-icon-only", title: "Create New Project", style: "text-decoration: none;" do %>
+                        <span>➕</span>
+                    <% end %>
+                    <%= link_to projects_path, class: "btn btn-icon-only", title: "Manage Projects", style: "text-decoration: none;" do %>
+                        <span>⚙️</span>
+                    <% end %>
+                </div>
+                <button class="btn btn-secondary" onclick="openGuide()">
+                    <span class="btn-icon">📖</span>
+                    How It Works
+                </button>
+                <button class="btn btn-primary" onclick="startDemo()">
+                    <span class="btn-icon">▶️</span>
+                    Start Live Demo
+                </button>
+                <div class="status-indicator">
+                    <span class="status-dot pulse"></span>
+                    <span>Monitoring Active</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+        <button class="sidebar-toggle" onclick="toggleSidebar()">
+            <span>☰</span>
+        </button>
+        <nav class="sidebar-nav">
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">MAIN</div>
+                <%= link_to dashboard_index_path, class: "sidebar-item #{controller_name == 'dashboard' && action_name == 'index' ? 'active' : ''}" do %>
+                    <span class="sidebar-icon">📊</span>
+                    <span class="sidebar-label">Dashboard</span>
+                <% end %>
+                <a href="#" class="sidebar-item" onclick="switchTab('incidents')">
+                    <span class="sidebar-icon">🔥</span>
+                    <span class="sidebar-label">Live Incidents</span>
+                    <span class="sidebar-badge">6</span>
+                </a>
+                <%= link_to dashboard_analytics_path, class: "sidebar-item #{action_name == 'analytics' ? 'active' : ''}" do %>
+                    <span class="sidebar-icon">📈</span>
+                    <span class="sidebar-label">Analytics</span>
+                <% end %>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">MANAGEMENT</div>
+                <%= link_to dashboard_projects_page_path, class: "sidebar-item #{action_name == 'projects_page' ? 'active' : ''}" do %>
+                    <span class="sidebar-icon">📁</span>
+                    <span class="sidebar-label">Projects</span>
+                <% end %>
+                <%= link_to dashboard_integrations_path, class: "sidebar-item #{action_name == 'integrations' ? 'active' : ''}" do %>
+                    <span class="sidebar-icon">🔗</span>
+                    <span class="sidebar-label">Integrations</span>
+                <% end %>
+                <%= link_to dashboard_team_path, class: "sidebar-item #{action_name == 'team' ? 'active' : ''}" do %>
+                    <span class="sidebar-icon">👥</span>
+                    <span class="sidebar-label">Team</span>
+                <% end %>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">MONITORING</div>
+                <%= link_to dashboard_activity_path, class: "sidebar-item #{action_name == 'activity' ? 'active' : ''}" do %>
+                    <span class="sidebar-icon">📝</span>
+                    <span class="sidebar-label">Activity Log</span>
+                <% end %>
+                <%= link_to dashboard_logs_explorer_path, class: "sidebar-item #{action_name == 'logs_explorer' ? 'active' : ''}" do %>
+                    <span class="sidebar-icon">🔍</span>
+                    <span class="sidebar-label">Logs Explorer</span>
+                <% end %>
+                <%= link_to dashboard_alerts_path, class: "sidebar-item #{action_name == 'alerts' ? 'active' : ''}" do %>
+                    <span class="sidebar-icon">🔔</span>
+                    <span class="sidebar-label">Alerts</span>
+                <% end %>
+                <%= link_to dashboard_alert_rules_path, class: "sidebar-item #{action_name == 'alert_rules' ? 'active' : ''}" do %>
+                    <span class="sidebar-icon">📋</span>
+                    <span class="sidebar-label">Alert Rules</span>
+                <% end %>
+                <%= link_to dashboard_reports_path, class: "sidebar-item #{action_name == 'reports' ? 'active' : ''}" do %>
+                    <span class="sidebar-icon">📄</span>
+                    <span class="sidebar-label">Reports</span>
+                <% end %>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">SETTINGS</div>
+                <%= link_to dashboard_settings_path, class: "sidebar-item #{action_name == 'settings' ? 'active' : ''}" do %>
+                    <span class="sidebar-icon">⚙️</span>
+                    <span class="sidebar-label">Settings</span>
+                <% end %>
+            </div>
+        </nav>
+    </aside>

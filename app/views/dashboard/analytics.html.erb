@@ -1,0 +1,113 @@
+<%= render 'shared/header_sidebar' %>
+
+    <!-- Main Content -->
+    <main class="main-content" id="main-content">
+        <div class="tab-content" id="analytics-tab">
+            <h2 class="section-title">📈 Analytics & Insights</h2>
+
+            <div class="analytics-grid">
+                <div class="analytics-card">
+                    <h3>Incident Trends (Last 30 Days)</h3>
+                    <div class="chart-placeholder">
+                        <div class="trend-line">
+                            <div class="trend-bar" style="height: 60%"></div>
+                            <div class="trend-bar" style="height: 45%"></div>
+                            <div class="trend-bar" style="height: 70%"></div>
+                            <div class="trend-bar" style="height: 40%"></div>
+                            <div class="trend-bar" style="height: 55%"></div>
+                            <div class="trend-bar" style="height: 30%"></div>
+                            <div class="trend-bar" style="height: 25%"></div>
+                        </div>
+                        <div class="chart-label">↓ 58% reduction in incidents</div>
+                    </div>
+                </div>
+
+                <div class="analytics-card">
+                    <h3>Auto-Fix Success Rate</h3>
+                    <div class="chart-placeholder">
+                        <div class="donut-chart">
+                            <div class="donut-center">
+                                <div class="donut-value">67%</div>
+                                <div class="donut-label">Success</div>
+                            </div>
+                        </div>
+                        <div class="chart-stats">
+                            <div class="chart-stat">
+                                <span class="stat-dot success"></span>
+                                <span>Fixed: 148</span>
+                            </div>
+                            <div class="chart-stat">
+                                <span class="stat-dot warning"></span>
+                                <span>Manual: 73</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="analytics-card">
+                    <h3>Top Issue Categories</h3>
+                    <div class="category-list">
+                        <div class="category-item">
+                            <div class="category-header">
+                                <span>Database Performance</span>
+                                <span class="category-count">45</span>
+                            </div>
+                            <div class="category-bar">
+                                <div class="category-fill" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div class="category-item">
+                            <div class="category-header">
+                                <span>API Timeouts</span>
+                                <span class="category-count">32</span>
+                            </div>
+                            <div class="category-bar">
+                                <div class="category-fill" style="width: 60%"></div>
+                            </div>
+                        </div>
+                        <div class="category-item">
+                            <div class="category-header">
+                                <span>Memory Leaks</span>
+                                <span class="category-count">18</span>
+                            </div>
+                            <div class="category-bar">
+                                <div class="category-fill" style="width: 35%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="analytics-card">
+                    <h3>Team Performance</h3>
+                    <div class="performance-list">
+                        <div class="performance-item">
+                            <div class="member-avatar small">RS</div>
+                            <div class="performance-details">
+                                <div class="performance-name">Rahul Sharma</div>
+                                <div class="performance-metric">23 incidents resolved</div>
+                            </div>
+                            <div class="performance-score">⭐ 4.8</div>
+                        </div>
+                        <div class="performance-item">
+                            <div class="member-avatar small">DM</div>
+                            <div class="performance-details">
+                                <div class="performance-name">David Miller</div>
+                                <div class="performance-metric">19 incidents resolved</div>
+                            </div>
+                            <div class="performance-score">⭐ 4.6</div>
+                        </div>
+                        <div class="performance-item">
+                            <div class="member-avatar small">ET</div>
+                            <div class="performance-details">
+                                <div class="performance-name">Emily Taylor</div>
+                                <div class="performance-metric">15 incidents resolved</div>
+                            </div>
+                            <div class="performance-score">⭐ 4.7</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+<%= javascript_include_tag "app", "data-turbo-track": "reload" %>

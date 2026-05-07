@@ -7,3 +7,10 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+# Create sample projects
+Project.find_or_create_by!(name: "Zero Downtime") do |project|
+  project.description = "AI-Powered DevOps Automation Platform - Monitors production errors, creates tickets, generates code fixes, and submits PRs automatically."
+end
+
+puts "Seeded #{Project.count} project(s)"

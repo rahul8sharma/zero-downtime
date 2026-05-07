@@ -1,0 +1,55 @@
+<%= render 'shared/header_sidebar' %>
+    <main class="main-content" id="main-content">
+        <div class="tab-content" id="alerts-tab">
+            <h2 class="section-title">🔔 Real-Time Alerts</h2>
+
+            <div class="alerts-list">
+                <div class="alert-item critical">
+                    <div class="alert-icon">🚨</div>
+                    <div class="alert-content">
+                        <div class="alert-header">
+                            <h4>Critical: API Response Time Spike</h4>
+                            <span class="alert-time">2 min ago</span>
+                        </div>
+                        <p>Average response time increased to 3.2s (threshold: 1s)</p>
+                        <div class="alert-actions">
+                            <button class="btn btn-sm btn-primary">Investigate</button>
+                            <button class="btn btn-sm btn-secondary">Acknowledge</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert-item warning">
+                    <div class="alert-icon">⚠️</div>
+                    <div class="alert-content">
+                        <div class="alert-header">
+                            <h4>Warning: High Memory Usage</h4>
+                            <span class="alert-time">15 min ago</span>
+                        </div>
+                        <p>Memory usage at 82% on production server prod-app-03</p>
+                        <div class="alert-actions">
+                            <button class="btn btn-sm btn-primary">View Details</button>
+                            <button class="btn btn-sm btn-secondary">Snooze</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert-item info">
+                    <div class="alert-icon">ℹ️</div>
+                    <div class="alert-content">
+                        <div class="alert-header">
+                            <h4>Info: Deployment Completed</h4>
+                            <span class="alert-time">1 hour ago</span>
+                        </div>
+                        <p>Version 2.4.1 deployed to production successfully</p>
+                        <div class="alert-actions">
+                            <button class="btn btn-sm btn-secondary">View Logs</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reports Tab -->
+    </main>
+<%= javascript_include_tag "app", "data-turbo-track": "reload" %>

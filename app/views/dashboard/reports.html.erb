@@ -1,0 +1,51 @@
+<%= render 'shared/header_sidebar' %>
+    <main class="main-content" id="main-content">
+        <div class="tab-content" id="reports-tab">
+            <h2 class="section-title">📄 Reports & Exports</h2>
+
+            <div class="reports-grid">
+                <div class="report-card">
+                    <div class="report-icon">📊</div>
+                    <h3>Monthly Summary Report</h3>
+                    <p>Comprehensive overview of incidents, fixes, and team performance</p>
+                    <div class="report-meta">
+                        <span>Last generated: Today</span>
+                    </div>
+                    <button class="btn btn-primary btn-block">Generate Report</button>
+                </div>
+
+                <div class="report-card">
+                    <div class="report-icon">💰</div>
+                    <h3>Cost Savings Report</h3>
+                    <p>Detailed breakdown of time and cost savings from automation</p>
+                    <div class="report-meta">
+                        <span>Last generated: 2 days ago</span>
+                    </div>
+                    <button class="btn btn-primary btn-block">Generate Report</button>
+                </div>
+
+                <div class="report-card">
+                    <div class="report-icon">🎯</div>
+                    <h3>Performance Metrics</h3>
+                    <p>MTTR, success rates, and SLA compliance metrics</p>
+                    <div class="report-meta">
+                        <span>Last generated: 1 week ago</span>
+                    </div>
+                    <button class="btn btn-primary btn-block">Generate Report</button>
+                </div>
+
+                <div class="report-card">
+                    <div class="report-icon">📈</div>
+                    <h3>Trend Analysis</h3>
+                    <p>Historical trends and predictive insights</p>
+                    <div class="report-meta">
+                        <span>Last generated: 3 days ago</span>
+                    </div>
+                    <button class="btn btn-primary btn-block">Generate Report</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logs Explorer Tab -->
+    </main>
+<%= javascript_include_tag "app", "data-turbo-track": "reload" %>

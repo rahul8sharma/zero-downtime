@@ -1,0 +1,126 @@
+<%= render 'shared/header_sidebar' %>
+
+    <!-- Main Content -->
+    <main class="main-content" id="main-content">
+        <div class="tab-content active" id="logs-explorer-tab">
+            <h2 class="section-title">🔍 Logs Explorer</h2>
+
+            <!-- Query Builder -->
+            <div class="logs-query-builder">
+                <div class="query-builder-header">
+                    <h3>Query Configuration</h3>
+                </div>
+                <form id="logs-query-form" onsubmit="searchLogs(event)">
+                    <div class="query-builder-grid">
+                        <div class="form-group">
+                            <label for="log-platform">Observability Platform *</label>
+                            <select id="log-platform" required>
+                                <option value="datadog">📊 Datadog</option>
+                                <option value="cloudwatch">☁️ AWS CloudWatch</option>
+                                <option value="rollbar">🐛 Rollbar</option>
+                                <option value="newrelic">📈 New Relic</option>
+                                <option value="sentry">🔍 Sentry</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="log-project">Project *</label>
+                            <select id="log-project" required>
+                                <option value="grc-spend">GRC Spend Management</option>
+                                <option value="workforce">Workforce Solutions</option>
+                                <option value="provider">Provider Platform</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="log-severity">Severity Level</label>
+                            <select id="log-severity">
+                                <option value="all">All Levels</option>
+                                <option value="critical">Critical</option>
+                                <option value="error">Error</option>
+                                <option value="warning">Warning</option>
+                                <option value="info">Info</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="log-start-time">Start Time *</label>
+                            <input type="datetime-local" id="log-start-time" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="log-end-time">End Time *</label>
+                            <input type="datetime-local" id="log-end-time" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="log-search">Search Query</label>
+                            <input type="text" id="log-search" placeholder="e.g., service:api status:error">
+                        </div>
+                    </div>
+
+                    <div class="query-builder-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <span>🔍</span> Search Logs
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="resetLogsQuery()">
+                            <span>🔄</span> Reset
+                        </button>
+                        <span class="query-info" id="logs-count-info">Ready to search</span>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Results Table -->
+            <div class="logs-results" id="logs-results-container" style="display: none;">
+                <div class="logs-results-header">
+                    <h3>Search Results</h3>
+                    <div class="results-actions">
+                        <button class="btn btn-secondary btn-sm" onclick="exportLogs()">
+                            <span>📥</span> Export CSV
+                        </button>
+                        <button class="btn btn-secondary btn-sm" onclick="selectAllLogs()">
+                            <span>✓</span> Select All
+                        </button>
+                        <button class="btn btn-primary btn-sm" onclick="bulkFixLogs()">
+                            <span>🤖</span> AI Fix Selected
+                        </button>
+                    </div>
+                </div>
+
+                <div class="logs-table-container">
+                    <table class="logs-table">
+                        <thead>
+                            <tr>
+                                <th width="40px"><input type="checkbox" id="select-all-logs" onchange="toggleAllLogs(this)"></th>
+                                <th>Timestamp</th>
+                                <th>Severity</th>
+                                <th>Service</th>
+                                <th>Message</th>
+                                <th>Source</th>
+                                <th width="200px">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logs-table-body">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="logs-pagination">
+                    <button class="btn btn-secondary btn-sm" onclick="loadPreviousLogs()">← Previous</button>
+                    <span class="pagination-info">Page 1 of 5</span>
+                    <button class="btn btn-secondary btn-sm" onclick="loadNextLogs()">Next →</button>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div class="logs-empty-state" id="logs-empty-state">
+                <div class="empty-icon">🔍</div>
+                <h3>Search Observability Logs</h3>
+                <p>Configure your query above and click "Search Logs" to fetch entries from your observability platforms.</p>
+            </div>
+        </div>
+    </main>
+
+<%= javascript_include_tag "app", "data-turbo-track": "reload" %>

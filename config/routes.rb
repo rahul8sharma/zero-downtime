@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  # Projects routes
+  resources :projects, only: [:index, :new, :create]
+
   # Home controller routes
   get 'home/new'
   post 'home/submit'
@@ -6,6 +9,16 @@ Rails.application.routes.draw do
   # Dashboard routes
   root 'dashboard#index'
   get 'dashboard/index'
+  get 'dashboard/logs_explorer'
+  get 'dashboard/alert_rules'
+  get 'dashboard/projects_page'
+  get 'dashboard/analytics'
+  get 'dashboard/integrations'
+  get 'dashboard/team'
+  get 'dashboard/activity'
+  get 'dashboard/alerts'
+  get 'dashboard/reports'
+  get 'dashboard/settings'
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
