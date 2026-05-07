@@ -17,33 +17,45 @@ class DatadogSyncErrorsService
 
     site = @project.datadog_site || 'datadoghq.com'
 
-    # Use Error Tracking Issues API - this is what powers the Errors tab
-    uri = URI("https://api.#{site}/api/v2/apm/issues")
+    # Use Logs Search API to find error logs
+    uri = URI("https://api.#{site}/api/v2/logs/events/search")
 
-    # Query for issues from the last 7 days
-    from_time = (7.days.ago.to_f * 1000).to_i
-    to_time = (Time.now.to_f * 1000).to_i
+    # Query for errors from the last 24 hours
+    from_time = 24.hours.ago.iso8601
+    to_time = Time.now.iso8601
 
-    query_params = {
-      'filter[from]': from_time,
-      'filter[to]': to_time,
-      'page[limit]': 100
-    }
-
-    uri.query = URI.encode_www_form(query_params)
+    request_body = {
+      filter: {
+        query: "status:error OR status:critical",
+        from: from_time,
+        to: to_time,
+        indexes: ["*"]  # Search all indexes
+      },
+      sort: "-timestamp",
+      page: {
+        limit: 100
+      },
+      options: {
+        timezone: "UTC"
+      }
+    }.to_json
 
     puts "=" * 80
-    puts "ERROR TRACKING API REQUEST"
+    puts "LOGS API REQUEST (POST)"
     puts "URL: #{uri}"
     puts "API KEY: #{@project.datadog_api_key[0..10]}..."
     puts "APP KEY: #{@project.datadog_app_key[0..10]}..."
-    puts "Service: #{@project.datadog_site}"
+    puts "Site: #{site}"
+    puts "Request Body:"
+    puts request_body
     puts "=" * 80
 
-    request = Net::HTTP::Get.new(uri)
+    request = Net::HTTP::Post.new(uri)
     request['DD-API-KEY'] = @project.datadog_api_key
     request['DD-APPLICATION-KEY'] = @project.datadog_app_key
+    request['Content-Type'] = 'application/json'
     request['Accept'] = 'application/json'
+    request.body = request_body
 
     response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
       http.read_timeout = 30
@@ -60,21 +72,21 @@ class DatadogSyncErrorsService
 
     if response.code == '200'
       data = JSON.parse(response.body)
-      issues = data['data'] || []
+      logs = data['data'] || []
 
-      puts "Found #{issues.length} error issues"
+      puts "Found #{logs.length} error logs"
 
-      issues.each do |issue|
-        create_incident_from_issue(issue)
+      logs.each do |log|
+        create_incident_from_log(log)
       end
 
       Activity.log(
         action: 'datadog_sync_completed',
         project: @project,
-        details: "Synced #{issues.length} errors from Datadog Error Tracking"
+        details: "Synced #{logs.length} errors from Datadog Logs"
       )
 
-      return { success: true, count: issues.length }
+      return { success: true, count: logs.length }
     else
       error_body = response.body
       error_parsed = JSON.parse(error_body) rescue { raw: error_body }
@@ -82,13 +94,19 @@ class DatadogSyncErrorsService
       puts "ERROR DETAILS:"
       puts error_parsed.inspect
 
+      error_msg = if error_parsed.is_a?(Hash)
+        error_parsed['errors']&.first || error_parsed['error'] || error_body[0..200]
+      else
+        error_body[0..200]
+      end
+
       Activity.log(
         action: 'datadog_sync_failed',
         project: @project,
-        details: "Failed to sync: #{response.code} - #{error_parsed['errors']&.first || error_body[0..200]}"
+        details: "Failed to sync: #{response.code} - #{error_msg}"
       )
 
-      return { success: false, error: "#{response.code} - #{error_parsed['errors']&.first&.dig('detail') || error_body[0..200]}" }
+      return { success: false, error: "#{response.code} - #{error_msg}" }
     end
   rescue StandardError => e
     puts "EXCEPTION: #{e.class} - #{e.message}"
@@ -103,52 +121,56 @@ class DatadogSyncErrorsService
     return { success: false, error: e.message }
   end
 
-  def create_incident_from_issue(issue)
-    attributes = issue['attributes'] || {}
-    issue_id = issue['id']
+  def create_incident_from_log(log)
+    attributes = log['attributes'] || {}
+    log_id = log['id']
 
-    existing = Incident.find_by(datadog_id: issue_id, project: @project)
+    existing = Incident.find_by(datadog_id: log_id, project: @project)
 
     if existing
       existing.update(last_synced_at: Time.now)
       return
     end
 
-    # Extract error details
-    title = attributes['title'] || 'Unknown Error'
-    message = attributes['message'] || attributes['title'] || ''
-    stack_trace = attributes['stack_trace'] || ''
+    # Extract error details from log
+    message = attributes['message'] || 'Unknown Error'
+    status = attributes['status'] || 'error'
+    service = attributes['service'] || 'unknown'
+
+    # Try to extract stack trace from attributes
+    stack_trace = attributes['error']&.dig('stack') ||
+                  attributes['attributes']&.dig('error', 'stack') ||
+                  message
 
     Incident.create!(
       project: @project,
-      datadog_id: issue_id,
-      title: title.truncate(255),
-      severity: map_severity_from_issue(attributes),
+      datadog_id: log_id,
+      title: message.truncate(255),
+      severity: map_severity_from_status(status),
       status: 'open',
       error_message: message,
       stack_trace: stack_trace,
-      service: attributes['service'] || 'unknown',
-      source: attributes['resource'] || 'datadog-apm',
+      service: service,
+      source: attributes['host'] || 'datadog-logs',
       last_synced_at: Time.now
     )
 
-    puts "Created incident: #{title[0..50]}"
+    puts "Created incident: #{message[0..50]}"
   rescue => e
     puts "Failed to create incident: #{e.message}"
-    Rails.logger.error "Failed to create incident from issue #{issue_id}: #{e.message}"
+    Rails.logger.error "Failed to create incident from log #{log_id}: #{e.message}"
   end
 
-  def map_severity_from_issue(attributes)
-    # APM issues don't have severity, use impact or error count
-    impact = attributes['impact']
-    error_count = attributes['error_count'] || 0
-
-    if error_count > 100
+  def map_severity_from_status(status)
+    case status&.downcase
+    when 'critical', 'emerg', 'alert'
       'critical'
-    elsif error_count > 10
+    when 'error', 'err'
       'high'
-    else
+    when 'warning', 'warn'
       'medium'
+    else
+      'low'
     end
   end
 
