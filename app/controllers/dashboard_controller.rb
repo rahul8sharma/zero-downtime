@@ -63,7 +63,7 @@ class DashboardController < ApplicationController
     @projects = Project.where.not(datadog_api_key: nil)
 
     if @projects.empty?
-      redirect_to root_path, alert: 'No projects with Datadog connected.'
+      redirect_to dashboard_incidents_path, alert: 'No projects with Datadog connected.'
       return
     end
 
@@ -77,6 +77,6 @@ class DashboardController < ApplicationController
       details: "Started syncing errors from Datadog for #{@projects.count} project(s)"
     )
 
-    redirect_to root_path, notice: "Syncing errors from Datadog in background for #{@projects.count} project(s)..."
+    redirect_to dashboard_incidents_path, notice: "Syncing errors from Datadog in background for #{@projects.count} project(s)..."
   end
 end
