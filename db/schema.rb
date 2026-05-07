@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_05_07_132208) do
+ActiveRecord::Schema[7.1].define(version: 2026_05_07_133435) do
   create_table "activities", force: :cascade do |t|
     t.string "action"
     t.integer "project_id", null: false
@@ -18,6 +18,22 @@ ActiveRecord::Schema[7.1].define(version: 2026_05_07_132208) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["project_id"], name: "index_activities_on_project_id"
+  end
+
+  create_table "incidents", force: :cascade do |t|
+    t.string "title"
+    t.string "severity"
+    t.string "status"
+    t.text "error_message"
+    t.text "stack_trace"
+    t.string "service"
+    t.string "source"
+    t.string "datadog_id"
+    t.integer "project_id", null: false
+    t.datetime "last_synced_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["project_id"], name: "index_incidents_on_project_id"
   end
 
   create_table "projects", force: :cascade do |t|
@@ -35,4 +51,5 @@ ActiveRecord::Schema[7.1].define(version: 2026_05_07_132208) do
   end
 
   add_foreign_key "activities", "projects"
+  add_foreign_key "incidents", "projects"
 end

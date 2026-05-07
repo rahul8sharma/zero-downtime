@@ -28,6 +28,10 @@
                         <span>⚙️</span>
                     <% end %>
                 </div>
+                <%= button_to dashboard_sync_datadog_errors_path, method: :post, class: "btn btn-secondary", style: "text-decoration: none; border: none; cursor: pointer;" do %>
+                    <span class="btn-icon">🔄</span>
+                    Sync Datadog Errors
+                <% end %>
                 <button class="btn btn-secondary" onclick="openGuide()">
                     <span class="btn-icon">📖</span>
                     How It Works

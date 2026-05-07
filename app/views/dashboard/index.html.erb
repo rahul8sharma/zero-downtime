@@ -158,10 +158,39 @@
                 <div class="panel">
                     <div class="panel-header">
                         <h2>🔥 Active Incidents</h2>
-                        <span class="badge badge-critical">3 Critical</span>
+                        <span class="badge badge-critical"><%= @incidents.where(severity: 'critical').count %> Critical</span>
                     </div>
                     <div class="panel-content" id="dashboard-incidents">
-                        <!-- Populated by JS -->
+                        <% if @incidents.any? %>
+                            <% @incidents.each do |incident| %>
+                                <div class="incident-card">
+                                    <div class="incident-card-header">
+                                        <div>
+                                            <div class="incident-title"><%= incident.title %></div>
+                                            <div class="incident-id">
+                                                <%= incident.project.name %> • <%= incident.service || 'Unknown Service' %>
+                                            </div>
+                                        </div>
+                                        <span class="status-badge <%= incident.status %>"><%= incident.status %></span>
+                                    </div>
+                                    <div class="incident-meta">
+                                        <span>🔥 <%= incident.severity %></span>
+                                        <span>⏰ <%= time_ago_in_words(incident.created_at) %> ago</span>
+                                        <% if incident.source %>
+                                            <span>📄 <%= incident.source %></span>
+                                        <% end %>
+                                    </div>
+                                </div>
+                            <% end %>
+                        <% else %>
+                            <div class="empty-state">
+                                <div class="empty-icon">✅</div>
+                                <p>No active incidents</p>
+                                <p style="font-size: 0.875rem; color: #6C757D; margin-top: 8px;">
+                                    Click "Sync Datadog Errors" to fetch latest errors
+                                </p>
+                            </div>
+                        <% end %>
                     </div>
                 </div>
 

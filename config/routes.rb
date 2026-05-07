@@ -28,6 +28,7 @@ Rails.application.routes.draw do
   get 'dashboard/alerts'
   get 'dashboard/reports'
   get 'dashboard/settings'
+  post 'dashboard/sync_datadog_errors'
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
