@@ -17,45 +17,33 @@ class DatadogSyncErrorsService
 
     site = @project.datadog_site || 'datadoghq.com'
 
-    # Use Logs Search API to find error logs
-    uri = URI("https://api.#{site}/api/v2/logs/events/search")
+    # Use RUM Error Tracking API - this is what the Error Tracking tab uses
+    uri = URI("https://api.#{site}/api/v2/rum/issues")
 
-    # Query for errors from the last 24 hours
-    from_time = 24.hours.ago.iso8601
-    to_time = Time.now.iso8601
+    # Query for issues from the last 7 days
+    from_time = (7.days.ago.to_f * 1000).to_i
+    to_time = (Time.now.to_f * 1000).to_i
 
-    request_body = {
-      filter: {
-        query: "status:error OR status:critical",
-        from: from_time,
-        to: to_time,
-        indexes: ["*"]  # Search all indexes
-      },
-      sort: "-timestamp",
-      page: {
-        limit: 100
-      },
-      options: {
-        timezone: "UTC"
-      }
-    }.to_json
+    query_params = {
+      'filter[from]': from_time,
+      'filter[to]': to_time,
+      'page[limit]': 100
+    }
+
+    uri.query = URI.encode_www_form(query_params)
 
     puts "=" * 80
-    puts "LOGS API REQUEST (POST)"
+    puts "ERROR TRACKING (RUM) API REQUEST"
     puts "URL: #{uri}"
     puts "API KEY: #{@project.datadog_api_key[0..10]}..."
     puts "APP KEY: #{@project.datadog_app_key[0..10]}..."
     puts "Site: #{site}"
-    puts "Request Body:"
-    puts request_body
     puts "=" * 80
 
-    request = Net::HTTP::Post.new(uri)
+    request = Net::HTTP::Get.new(uri)
     request['DD-API-KEY'] = @project.datadog_api_key
     request['DD-APPLICATION-KEY'] = @project.datadog_app_key
-    request['Content-Type'] = 'application/json'
     request['Accept'] = 'application/json'
-    request.body = request_body
 
     response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
       http.read_timeout = 30
@@ -72,21 +60,21 @@ class DatadogSyncErrorsService
 
     if response.code == '200'
       data = JSON.parse(response.body)
-      logs = data['data'] || []
+      issues = data['data'] || []
 
-      puts "Found #{logs.length} error logs"
+      puts "Found #{issues.length} error issues"
 
-      logs.each do |log|
-        create_incident_from_log(log)
+      issues.each do |issue|
+        create_incident_from_issue(issue)
       end
 
       Activity.log(
         action: 'datadog_sync_completed',
         project: @project,
-        details: "Synced #{logs.length} errors from Datadog Logs"
+        details: "Synced #{issues.length} errors from Datadog Error Tracking"
       )
 
-      return { success: true, count: logs.length }
+      return { success: true, count: issues.length }
     else
       error_body = response.body
       error_parsed = JSON.parse(error_body) rescue { raw: error_body }
@@ -121,57 +109,48 @@ class DatadogSyncErrorsService
     return { success: false, error: e.message }
   end
 
-  def create_incident_from_log(log)
-    attributes = log['attributes'] || {}
-    log_id = log['id']
+  def create_incident_from_issue(issue)
+    attributes = issue['attributes'] || {}
+    issue_id = issue['id']
 
-    existing = Incident.find_by(datadog_id: log_id, project: @project)
+    existing = Incident.find_by(datadog_id: issue_id, project: @project)
 
     if existing
       existing.update(last_synced_at: Time.now)
+      puts "Updated existing incident: #{existing.title[0..50]}"
       return
     end
 
-    # Extract error details from log
-    message = attributes['message'] || 'Unknown Error'
-    status = attributes['status'] || 'error'
+    # Extract error details from RUM/Error Tracking issue
+    title = attributes['title'] || attributes['message'] || 'Unknown Error'
+    message = attributes['message'] || attributes['title'] || ''
     service = attributes['service'] || 'unknown'
 
-    # Try to extract stack trace from attributes
-    stack_trace = attributes['error']&.dig('stack') ||
-                  attributes['attributes']&.dig('error', 'stack') ||
-                  message
+    # Extract error type and stack trace
+    error_type = attributes['error_type'] || attributes['type'] || 'Error'
+    stack_trace = attributes['stack_trace'] || attributes['stacktrace'] || ''
+
+    # Count indicates severity
+    count = attributes['count'] || attributes['occurrences'] || 0
 
     Incident.create!(
       project: @project,
-      datadog_id: log_id,
-      title: message.truncate(255),
-      severity: map_severity_from_status(status),
+      datadog_id: issue_id,
+      title: title.to_s.truncate(255),
+      severity: count > 100 ? 'critical' : count > 10 ? 'high' : 'medium',
       status: 'open',
-      error_message: message,
+      error_message: "#{error_type}: #{message}",
       stack_trace: stack_trace,
       service: service,
-      source: attributes['host'] || 'datadog-logs',
+      source: attributes['resource'] || 'error-tracking',
       last_synced_at: Time.now
     )
 
-    puts "Created incident: #{message[0..50]}"
+    puts "Created incident: #{title.to_s[0..50]} (count: #{count})"
   rescue => e
     puts "Failed to create incident: #{e.message}"
-    Rails.logger.error "Failed to create incident from log #{log_id}: #{e.message}"
-  end
-
-  def map_severity_from_status(status)
-    case status&.downcase
-    when 'critical', 'emerg', 'alert'
-      'critical'
-    when 'error', 'err'
-      'high'
-    when 'warning', 'warn'
-      'medium'
-    else
-      'low'
-    end
+    puts "Issue data: #{issue.inspect[0..200]}"
+    Rails.logger.error "Failed to create incident from issue #{issue_id}: #{e.message}"
   end
 
   def process_errors(data)
