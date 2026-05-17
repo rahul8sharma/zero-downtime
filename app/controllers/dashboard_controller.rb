@@ -60,11 +60,28 @@ class DashboardController < ApplicationController
   end
 
   def sync_datadog_errors
-    @projects = Project.where.not(datadog_api_key: nil)
+    # Get projects with Datadog configured OR use environment variables for all projects
+    @projects = Project.all
 
     if @projects.empty?
-      redirect_to dashboard_incidents_path, alert: 'No projects with Datadog connected.'
+      redirect_to dashboard_incidents_path, alert: 'No projects found.'
       return
+    end
+
+    # Check if we have global Datadog credentials
+    global_dd_api_key = ENV['DD_API_KEY']
+    global_dd_app_key = ENV['DD_APP_KEY']
+    global_dd_site = ENV['DD_SITE'] || 'datadoghq.eu'
+
+    # Ensure projects have credentials (use global if not set)
+    @projects.each do |project|
+      if project.datadog_api_key.blank? && global_dd_api_key.present?
+        project.update_columns(
+          datadog_api_key: global_dd_api_key,
+          datadog_app_key: global_dd_app_key,
+          datadog_site: global_dd_site
+        )
+      end
     end
 
     Activity.log(

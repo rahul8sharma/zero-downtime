@@ -112,10 +112,13 @@ GEM
     erb (4.0.4.1)
       cgi (>= 0.3.3)
     erubi (1.13.1)
+    event_stream_parser (1.0.0)
     faraday (2.14.1)
       faraday-net_http (>= 2.0, < 3.5)
       json
       logger
+    faraday-multipart (1.2.0)
+      multipart-post (~> 2.0)
     faraday-net_http (3.4.2)
       net-http (~> 0.5)
     ffi (1.17.4)
@@ -184,6 +187,7 @@ GEM
     minitest (5.26.1)
     msgpack (1.8.0)
     multi_xml (0.6.0)
+    multipart-post (2.4.1)
     mutex_m (0.3.0)
     net-http (0.9.1)
       uri (>= 0.11.1)
@@ -299,6 +303,10 @@ GEM
       io-console (~> 0.5)
     request_store (1.7.0)
       rack (>= 1.4)
+    ruby-anthropic (0.4.2)
+      event_stream_parser (>= 0.3.0, < 2.0.0)
+      faraday (>= 1)
+      faraday-multipart (>= 1)
     securerandom (0.3.2)
     snaky_hash (2.0.3)
       hashie (>= 0.1.0, < 6)
@@ -364,6 +372,7 @@ DEPENDENCIES
   pry-rails
   puma (>= 5.0)
   rails (~> 7.1.5, >= 7.1.5.2)
+  ruby-anthropic (~> 0.4.2)
   sprockets-rails
   sqlite3 (~> 1.4)
   stimulus-rails

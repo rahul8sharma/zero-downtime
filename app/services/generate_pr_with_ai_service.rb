@@ -1,0 +1,155 @@
+class GeneratePrWithAiService
+  def initialize(project, incident)
+    @project = project
+    @incident = incident
+  end
+
+  def perform
+    puts "\n" + "=" * 80
+    puts "GENERATE PR WITH AI - Starting"
+    puts "Project: #{@project.name}"
+    puts "Incident: #{@incident.title}"
+    puts "=" * 80
+
+    # Validate project has GitHub configured
+    unless @project.github_token.present? && @project.github_repo_url.present?
+      return { success: false, error: 'GitHub not configured for this project' }
+    end
+
+    # Step 1: Use AI to analyze the error and generate a fix
+    puts "\n[1/5] Analyzing error with AI..."
+    ai_result = AiCodeAnalyzerService.new(@project, @incident).analyze_and_generate_fix
+
+    unless ai_result[:success]
+      return { success: false, error: "AI analysis failed: #{ai_result[:error]}" }
+    end
+
+    # Step 2: Generate branch name
+    puts "\n[2/5] Generating branch name..."
+    branch_name = @incident.suggested_branch_name + "-#{Time.now.to_i}"
+    puts "Branch: #{branch_name}"
+
+    # Step 3: Create branch on GitHub
+    puts "\n[3/5] Creating branch on GitHub..."
+    github_service = GithubPrService.new(@project)
+    branch_result = github_service.create_branch(branch_name)
+
+    unless branch_result[:success]
+      return { success: false, error: "Failed to create branch: #{branch_result[:error]}" }
+    end
+
+    # Step 4: Commit the fix to the branch
+    puts "\n[4/5] Committing fix to branch..."
+    controller_file = "app/controllers/#{@incident.source.split('#').first.underscore}.rb"
+
+    # Use the AI-generated fixed code directly
+    fixed_content = ai_result[:fixed_code]
+
+    unless fixed_content.present?
+      return { success: false, error: 'AI did not generate a code fix' }
+    end
+
+    puts "✓ AI generated #{fixed_content.lines.count} lines of fixed code"
+
+    commit_message = "Fix: #{@incident.title}\n\n#{ai_result[:fix_description]}"
+    commit_result = github_service.create_or_update_file(
+      controller_file,
+      fixed_content,
+      commit_message,
+      branch_name
+    )
+
+    unless commit_result[:success]
+      return { success: false, error: "Failed to commit fix: #{commit_result[:error]}" }
+    end
+
+    # Step 5: Create pull request
+    puts "\n[5/5] Creating pull request..."
+    pr_title = @incident.suggested_pr_title
+    pr_body = build_pr_body(ai_result)
+
+    pr_result = github_service.create_pull_request(pr_title, pr_body, branch_name)
+
+    unless pr_result[:success]
+      return { success: false, error: "Failed to create PR: #{pr_result[:error]}" }
+    end
+
+    # Update incident with PR information
+    @incident.update!(
+      pr_url: pr_result[:pr_url],
+      pr_number: pr_result[:pr_number],
+      pr_status: pr_result[:pr_status],
+      pr_created_at: Time.now,
+      branch_name: branch_name,
+      fix_description: ai_result[:fix_description]
+    )
+
+    # Log activity
+    Activity.log(
+      action: 'pr_created_with_ai',
+      project: @project,
+      details: "Created PR ##{pr_result[:pr_number]} for incident ##{@incident.id}: #{pr_result[:pr_url]}"
+    )
+
+    puts "\n" + "=" * 80
+    puts "✓ SUCCESS! PR Created: #{pr_result[:pr_url]}"
+    puts "=" * 80
+
+    {
+      success: true,
+      pr_url: pr_result[:pr_url],
+      pr_number: pr_result[:pr_number],
+      branch_name: branch_name
+    }
+  rescue StandardError => e
+    puts "\n✗ ERROR: #{e.message}"
+    puts e.backtrace.first(5).join("\n")
+
+    Activity.log(
+      action: 'pr_creation_failed',
+      project: @project,
+      details: "Failed to create PR for incident ##{@incident.id}: #{e.message}"
+    )
+
+    { success: false, error: e.message }
+  end
+
+  private
+
+  def build_pr_body(ai_result)
+    <<~BODY
+      ## 🤖 AI-Generated Fix for Incident ##{@incident.id}
+
+      **Incident:** #{@incident.title}
+
+      ### 📊 Error Details
+      - **Endpoint:** `#{@incident.http_method} #{@incident.http_path}`
+      - **HTTP Status:** #{@incident.http_status}
+      - **Controller:** #{@incident.source}
+      - **Duration:** #{@incident.duration_ms&.round(2)}ms
+      - **Severity:** **#{@incident.severity.upcase}**
+
+      ### 🔍 Root Cause Analysis
+      #{ai_result[:root_cause]}
+
+      ### 🛠️ What Changed
+      #{ai_result[:fix_description]}
+
+      ### ✅ Testing Recommendations
+      #{ai_result[:testing_recommendations]&.map { |rec| "- #{rec}" }&.join("\n") || 'No specific test recommendations provided'}
+
+      ### 📝 Review Notes
+      - ✅ This PR contains **working code changes** (not comments)
+      - ⚠️ **AI-generated code** - please review carefully before merging
+      - 🧪 Run the test suite to ensure no regressions
+      - 📊 Verify the fix resolves the #{@incident.http_status} error
+      - 🔍 Check edge cases and error handling
+
+      #{@incident.trace_url ? "### 🔗 Datadog Trace\n[View in Datadog](#{@incident.trace_url})" : ""}
+
+      ---
+
+      🤖 Generated by [Zero Downtime AI](https://github.com) | Incident ##{@incident.id}
+    BODY
+  end
+end

@@ -17,7 +17,8 @@ class DatadogSyncErrorsService
 
     site = @project.datadog_site || 'datadoghq.com'
 
-    # Use Logs Search API to find error logs
+    # Use Logs API to search for HTTP 500 errors from APM traces
+    # These show up as logs with the http.status_code tag
     uri = URI("https://api.#{site}/api/v2/logs/events/search")
 
     # Query for errors from the last 24 hours
@@ -26,22 +27,19 @@ class DatadogSyncErrorsService
 
     request_body = {
       filter: {
-        query: "status:error OR status:critical",
+        # Search for logs from zero-downtime service with HTTP 500 status codes
+        query: "service:zero-downtime @http.status_code:>=500",
         from: from_time,
-        to: to_time,
-        indexes: ["*"]  # Search all indexes
+        to: to_time
       },
       sort: "-timestamp",
       page: {
         limit: 100
-      },
-      options: {
-        timezone: "UTC"
       }
     }.to_json
 
     puts "=" * 80
-    puts "LOGS API REQUEST (POST)"
+    puts "LOGS API REQUEST (POST) - Searching for APM errors"
     puts "URL: #{uri}"
     puts "API KEY: #{@project.datadog_api_key[0..10]}..."
     puts "APP KEY: #{@project.datadog_app_key[0..10]}..."
@@ -65,9 +63,8 @@ class DatadogSyncErrorsService
     puts "=" * 80
     puts "RESPONSE CODE: #{response.code}"
     puts "RESPONSE MESSAGE: #{response.message}"
-    puts "RESPONSE HEADERS: #{response.to_hash.inspect}"
-    puts "RESPONSE BODY (first 1000 chars):"
-    puts response.body[0..1000]
+    puts "RESPONSE BODY (first 1500 chars):"
+    puts response.body[0..1500]
     puts "=" * 80
 
     if response.code == '200'
@@ -77,13 +74,13 @@ class DatadogSyncErrorsService
       puts "Found #{logs.length} error logs"
 
       logs.each do |log|
-        create_incident_from_log(log)
+        create_incident_from_apm_log(log)
       end
 
       Activity.log(
         action: 'datadog_sync_completed',
         project: @project,
-        details: "Synced #{logs.length} errors from Datadog Logs"
+        details: "Synced #{logs.length} errors from Datadog APM"
       )
 
       return { success: true, count: logs.length }
@@ -119,6 +116,109 @@ class DatadogSyncErrorsService
     )
 
     return { success: false, error: e.message }
+  end
+
+  def create_incident_from_apm_log(log)
+    attributes = log['attributes'] || {}
+    log_id = log['id']
+
+    existing = Incident.find_by(datadog_id: log_id, project: @project)
+
+    if existing
+      existing.update(last_synced_at: Time.now)
+      return
+    end
+
+    # Extract error details from APM log
+    service = attributes['service'] || 'zero-downtime'
+    inner_attrs = attributes['attributes'] || {}
+
+    # Get HTTP information
+    http_status = inner_attrs.dig('http', 'status_code')&.to_i || 500
+    http_method = inner_attrs.dig('http', 'method') || 'GET'
+    http_path = inner_attrs.dig('http', 'url_details', 'path') || '/'
+
+    # Get controller/action information
+    controller = inner_attrs['controller'] || 'UnknownController'
+    action = inner_attrs['action'] || 'unknown'
+    duration = inner_attrs['duration'] || 0
+    duration_ms = (duration / 1000.0).round(2)  # Convert microseconds to milliseconds
+
+    # Get trace information from dd attributes
+    dd_attrs = inner_attrs['dd'] || {}
+    trace_id = dd_attrs['trace_id']
+    span_id = dd_attrs['span_id']
+
+    # Build Datadog trace URL if we have trace_id
+    site = @project.datadog_site || 'datadoghq.eu'
+    trace_url = if trace_id
+                  "https://app.#{site}/apm/trace/#{trace_id}?env=#{dd_attrs['env'] || 'development'}"
+                else
+                  nil
+                end
+
+    # Build error type from controller + action
+    error_type = "#{controller}##{action}"
+
+    # Get timestamp
+    timestamp = attributes['timestamp'] || Time.now.iso8601
+
+    # Build title
+    title = "#{http_method} #{http_path} - #{http_status} Error in #{error_type}"
+
+    # Build error message with more context
+    error_msg = "HTTP #{http_status} error in #{error_type}\n" \
+                "Path: #{http_path}\n" \
+                "Method: #{http_method}\n" \
+                "Duration: #{duration_ms}ms\n" \
+                "Timestamp: #{timestamp}\n" \
+                "#{trace_url ? 'Trace: ' + trace_url : ''}"
+
+    # Stack trace (if available from tags or attributes)
+    stack_trace = inner_attrs.dig('error', 'stack') || nil
+
+    # Determine severity based on HTTP status code
+    severity = case http_status
+               when 500
+                 'critical'  # Internal Server Error
+               when 501..503
+                 'high'
+               when 504..599
+                 'medium'
+               else
+                 'medium'
+               end
+
+    Incident.create!(
+      project: @project,
+      datadog_id: log_id,
+      title: title.truncate(255),
+      severity: severity,
+      status: 'open',
+      error_message: error_msg,
+      stack_trace: stack_trace,
+      service: service,
+      source: error_type,
+      # Trace information for PR creation
+      trace_id: trace_id,
+      span_id: span_id,
+      trace_url: trace_url,
+      http_method: http_method,
+      http_path: http_path,
+      http_status: http_status,
+      duration_ms: duration_ms,
+      last_synced_at: Time.now
+    )
+
+    puts "✓ Created incident: #{title[0..70]}"
+  rescue => e
+    puts "✗ Failed to create incident: #{e.message}"
+    puts e.backtrace.first(3).join("\n")
+    Rails.logger.error "Failed to create incident from log #{log_id}: #{e.message}"
+  end
+
+  def extract_tag_value(tags, key)
+    tags.find { |t| t.start_with?("#{key}:") }&.split(':', 2)&.last
   end
 
   def create_incident_from_log(log)

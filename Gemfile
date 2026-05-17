@@ -54,6 +54,9 @@ gem 'datadog_api_client'
 # Structured logging for better Datadog integration
 gem 'lograge'
 
+# AI Integration for automated PR creation
+gem 'ruby-anthropic', '~> 0.4.2'
+
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ mswin mswin64 mingw x64_mingw jruby ]
 

@@ -7,6 +7,14 @@ Rails.application.routes.draw do
       post 'save_repo'
       get 'connect_datadog'
       post 'save_datadog'
+      post 'create_prs', to: 'incidents#create_pr_for_project'
+    end
+  end
+
+  # Incidents routes
+  resources :incidents, only: [] do
+    member do
+      post 'create_pr'
     end
   end
 

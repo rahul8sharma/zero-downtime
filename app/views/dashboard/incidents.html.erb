@@ -2,7 +2,21 @@
 
 <main class="main-content" id="main-content">
     <div class="tab-content active">
-        <h2 class="section-title">🔥 Live Incidents</h2>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2 class="section-title" style="margin: 0;">🔥 Live Incidents</h2>
+            <div style="display: flex; gap: 10px;">
+                <%= button_to "🔄 Sync Datadog Errors", dashboard_sync_datadog_errors_path, method: :post,
+                    class: "btn btn-primary",
+                    style: "padding: 10px 20px; background: #632CA6; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 8px rgba(99, 44, 166, 0.3);",
+                    data: { turbo: false } %>
+                <% if @projects.any? %>
+                    <%= button_to "🤖 Create PRs with AI", create_prs_project_path(@projects.first), method: :post,
+                        class: "btn btn-success",
+                        style: "padding: 10px 20px; background: #28A745; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);",
+                        data: { turbo: false, confirm: 'This will create AI-generated PRs for up to 5 open incidents. Continue?' } %>
+                <% end %>
+            </div>
+        </div>
 
         <!-- Filters and Search -->
         <div style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
@@ -111,8 +125,50 @@
                             </div>
                         <% end %>
 
+                        <!-- Trace Information -->
+                        <% if incident.http_method.present? || incident.http_path.present? %>
+                            <div style="background: #E8F4FD; padding: 12px; border-radius: 4px; margin-bottom: 12px; border-left: 3px solid #00A3E0;">
+                                <div style="font-weight: 600; color: #00A3E0; margin-bottom: 8px; font-size: 0.875rem;">
+                                    🔍 Request Details
+                                </div>
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; font-size: 0.875rem;">
+                                    <% if incident.http_method.present? %>
+                                        <div>
+                                            <span style="color: #6C757D;">Method:</span>
+                                            <code style="background: white; padding: 2px 8px; border-radius: 3px; font-weight: 600; margin-left: 4px;"><%= incident.http_method %></code>
+                                        </div>
+                                    <% end %>
+                                    <% if incident.http_path.present? %>
+                                        <div>
+                                            <span style="color: #6C757D;">Path:</span>
+                                            <code style="background: white; padding: 2px 8px; border-radius: 3px; margin-left: 4px;"><%= incident.http_path %></code>
+                                        </div>
+                                    <% end %>
+                                    <% if incident.http_status.present? %>
+                                        <div>
+                                            <span style="color: #6C757D;">Status:</span>
+                                            <code style="background: white; padding: 2px 8px; border-radius: 3px; font-weight: 600; color: #DC3545; margin-left: 4px;"><%= incident.http_status %></code>
+                                        </div>
+                                    <% end %>
+                                    <% if incident.duration_ms.present? %>
+                                        <div>
+                                            <span style="color: #6C757D;">Duration:</span>
+                                            <code style="background: white; padding: 2px 8px; border-radius: 3px; margin-left: 4px;"><%= incident.duration_ms.round(2) %>ms</code>
+                                        </div>
+                                    <% end %>
+                                </div>
+                                <% if incident.trace_url.present? %>
+                                    <div style="margin-top: 10px;">
+                                        <a href="<%= incident.trace_url %>" target="_blank" style="color: #00A3E0; text-decoration: none; font-size: 0.875rem; font-weight: 600;">
+                                            📊 View in Datadog →
+                                        </a>
+                                    </div>
+                                <% end %>
+                            </div>
+                        <% end %>
+
                         <% if incident.source.present? %>
-                            <div style="color: #6C757D; font-size: 0.875rem;">
+                            <div style="color: #6C757D; font-size: 0.875rem; margin-bottom: 8px;">
                                 📄 Source: <code style="background: #F8F9FA; padding: 2px 6px; border-radius: 3px;"><%= incident.source %></code>
                             </div>
                         <% end %>
@@ -126,6 +182,43 @@
                                     <pre style="margin: 0; white-space: pre-wrap;"><%= incident.stack_trace %></pre>
                                 </div>
                             </details>
+                        <% end %>
+
+                        <!-- PR Status or Create PR Button -->
+                        <% if incident.pr_created? %>
+                            <div style="background: #D4EDDA; padding: 12px; border-radius: 4px; margin-top: 12px; border-left: 3px solid <%= incident.pr_status_color %>;">
+                                <div style="font-weight: 600; color: #155724; margin-bottom: 8px; font-size: 0.875rem;">
+                                    ✅ Pull Request Created
+                                </div>
+                                <div style="font-size: 0.875rem;">
+                                    <a href="<%= incident.pr_url %>" target="_blank" style="color: <%= incident.pr_status_color %>; font-weight: 600; text-decoration: none;">
+                                        PR #<%= incident.pr_number %> - <%= incident.pr_status.titleize %>
+                                    </a>
+                                    <div style="color: #6C757D; margin-top: 6px;">
+                                        <strong>Branch:</strong> <code style="background: white; padding: 2px 6px; border-radius: 3px; font-size: 0.75rem;"><%= incident.branch_name %></code>
+                                    </div>
+                                    <div style="color: #6C757D; margin-top: 4px;">
+                                        <strong>Created:</strong> <%= time_ago_in_words(incident.pr_created_at) %> ago
+                                    </div>
+                                    <% if incident.fix_description.present? %>
+                                        <details style="margin-top: 8px;">
+                                            <summary style="cursor: pointer; color: #155724; font-weight: 600; font-size: 0.75rem;">
+                                                View AI Fix Description
+                                            </summary>
+                                            <div style="background: white; padding: 8px; border-radius: 3px; margin-top: 4px; font-size: 0.75rem; color: #495057;">
+                                                <%= incident.fix_description %>
+                                            </div>
+                                        </details>
+                                    <% end %>
+                                </div>
+                            </div>
+                        <% else %>
+                            <div style="margin-top: 12px;">
+                                <%= button_to "🤖 Create PR with AI", create_pr_incident_path(incident), method: :post,
+                                    class: "btn btn-sm btn-primary",
+                                    style: "padding: 8px 16px; background: #28A745; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 0.875rem; display: inline-flex; align-items: center; gap: 6px;",
+                                    data: { turbo: false, confirm: "Create an AI-generated PR to fix this incident?" } %>
+                            </div>
                         <% end %>
                     </div>
                 <% end %>
