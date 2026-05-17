@@ -122,10 +122,12 @@ class DatadogSyncErrorsService
     attributes = log['attributes'] || {}
     log_id = log['id']
 
+    # Check for existing incident by datadog_id first
     existing = Incident.find_by(datadog_id: log_id, project: @project)
 
     if existing
       existing.update(last_synced_at: Time.now)
+      puts "⟳ Incident already exists (datadog_id: #{log_id}), updating last_synced_at"
       return
     end
 
@@ -144,6 +146,25 @@ class DatadogSyncErrorsService
     duration = inner_attrs['duration'] || 0
     duration_ms = (duration / 1000.0).round(2)  # Convert microseconds to milliseconds
 
+    # Build error type from controller + action
+    error_type = "#{controller}##{action}"
+
+    # Check for duplicate based on error signature (same error type, path, status in last 24 hours)
+    # This prevents creating multiple incidents for the same recurring error
+    duplicate = Incident.find_duplicate(
+      project: @project,
+      source: error_type,
+      http_path: http_path,
+      http_status: http_status,
+      within: 24.hours
+    )
+
+    if duplicate
+      duplicate.update(last_synced_at: Time.now)
+      puts "⟳ Duplicate incident detected (#{error_type} on #{http_path}), updating existing incident ##{duplicate.id}"
+      return
+    end
+
     # Get trace information from dd attributes
     dd_attrs = inner_attrs['dd'] || {}
     trace_id = dd_attrs['trace_id']
@@ -156,9 +177,6 @@ class DatadogSyncErrorsService
                 else
                   nil
                 end
-
-    # Build error type from controller + action
-    error_type = "#{controller}##{action}"
 
     # Get timestamp
     timestamp = attributes['timestamp'] || Time.now.iso8601

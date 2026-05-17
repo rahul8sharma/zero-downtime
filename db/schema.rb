@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_05_17_185454) do
+ActiveRecord::Schema[7.1].define(version: 2026_05_17_193541) do
   create_table "activities", force: :cascade do |t|
     t.string "action"
     t.integer "project_id"
@@ -46,6 +46,8 @@ ActiveRecord::Schema[7.1].define(version: 2026_05_17_185454) do
     t.datetime "pr_created_at"
     t.string "branch_name"
     t.text "fix_description"
+    t.index ["last_synced_at"], name: "index_incidents_on_last_synced_at"
+    t.index ["project_id", "source", "http_path", "http_status", "status"], name: "index_incidents_on_error_signature"
     t.index ["project_id"], name: "index_incidents_on_project_id"
   end
 

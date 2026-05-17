@@ -88,4 +88,15 @@ class Incident < ApplicationRecord
       '#28a745'  # Green (open)
     end
   end
+
+  # Class method to find duplicate incident based on error signature
+  def self.find_duplicate(project:, source:, http_path:, http_status:, within: 24.hours)
+    where(
+      project: project,
+      source: source,
+      http_path: http_path,
+      http_status: http_status,
+      status: 'open'
+    ).where('created_at > ?', within.ago).first
+  end
 end
