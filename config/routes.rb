@@ -30,7 +30,7 @@ Rails.application.routes.draw do
   get 'dashboard/index'
   get 'dashboard/incidents'
   get 'dashboard/logs_explorer'
-  get 'dashboard/alert_rules'
+  get 'dashboard/alert_rules', to: redirect('/dashboard/alerts')  # Redirect to merged alerts page
   get 'dashboard/projects_page'
   get 'dashboard/analytics'
   get 'dashboard/activity'

@@ -86,13 +86,9 @@
                     <span class="sidebar-icon">🔍</span>
                     <span class="sidebar-label">Logs Explorer</span>
                 <% end %>
-                <%= link_to dashboard_alerts_path, class: "sidebar-item #{action_name == 'alerts' ? 'active' : ''}" do %>
+                <%= link_to dashboard_alerts_path, class: "sidebar-item #{action_name == 'alerts' || action_name == 'alert_rules' ? 'active' : ''}" do %>
                     <span class="sidebar-icon">🔔</span>
-                    <span class="sidebar-label">Alerts</span>
-                <% end %>
-                <%= link_to dashboard_alert_rules_path, class: "sidebar-item #{action_name == 'alert_rules' ? 'active' : ''}" do %>
-                    <span class="sidebar-icon">📋</span>
-                    <span class="sidebar-label">Alert Rules</span>
+                    <span class="sidebar-label">Alerts & Rules</span>
                 <% end %>
                 <%= link_to dashboard_reports_path, class: "sidebar-item #{action_name == 'reports' ? 'active' : ''}" do %>
                     <span class="sidebar-icon">📄</span>
