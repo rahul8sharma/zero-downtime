@@ -207,7 +207,7 @@ class DatadogSyncErrorsService
                  'medium'
                end
 
-    Incident.create!(
+    incident = Incident.create!(
       project: @project,
       datadog_id: log_id,
       title: title.truncate(255),
@@ -229,6 +229,13 @@ class DatadogSyncErrorsService
     )
 
     puts "✓ Created incident: #{title[0..70]}"
+
+    # Log incident creation
+    Activity.log(
+      action: 'incident_created',
+      project: @project,
+      details: "New #{severity} incident: #{title[0..80]}"
+    )
   rescue => e
     puts "✗ Failed to create incident: #{e.message}"
     puts e.backtrace.first(3).join("\n")
