@@ -2,7 +2,7 @@ require 'net/http'
 require 'json'
 
 # Get these from your project
-API_KEY = ENV['DD_API_KEY'] || '1d208fa76aaee53230acfdeeabc5ed08'
+API_KEY = ENV['DD_API_KEY'] || '9801e15c98a47c9de33f9c20cb257f7d'
 APP_KEY = ENV['DD_APP_KEY'] || 'YOUR_APP_KEY_HERE'
 SITE = 'datadoghq.eu'
 

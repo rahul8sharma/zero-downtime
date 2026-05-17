@@ -1,5 +1,6 @@
 class HomeController < ApplicationController
   def new
+    fdffs
     # Display the form
   end
 

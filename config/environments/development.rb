@@ -44,6 +44,11 @@ Rails.application.configure do
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
+  # Configure logger for Datadog compatibility (write to file for agent to tail)
+  log_file = Rails.root.join('log', "#{Rails.env}.log")
+  config.logger = ActiveSupport::Logger.new(log_file)
+  config.active_job.logger = config.logger
+
   # Raise exceptions for disallowed deprecations.
   config.active_support.disallowed_deprecation = :raise
 
@@ -73,4 +78,22 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions
   config.action_controller.raise_on_missing_callback_actions = true
+
+  # Configure lograge for structured JSON logging (Datadog)
+  config.lograge.enabled = true
+  config.lograge.formatter = Lograge::Formatters::Json.new
+  config.lograge.custom_options = lambda do |event|
+    {
+      dd: {
+        trace_id: Datadog::Tracing.correlation.trace_id.to_s,
+        span_id: Datadog::Tracing.correlation.span_id.to_s,
+        env: Datadog::Tracing.correlation.env.to_s,
+        service: Datadog::Tracing.correlation.service.to_s,
+        version: Datadog::Tracing.correlation.version.to_s
+      },
+      ddsource: ['ruby'],
+      params: event.payload[:params].except('controller', 'action'),
+      host: event.payload[:host]
+    }
+  end
 end
