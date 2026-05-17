@@ -2,20 +2,8 @@
 
 <main class="main-content" id="main-content">
     <div class="tab-content active">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <div style="margin-bottom: 20px;">
             <h2 class="section-title" style="margin: 0;">🔥 Live Incidents</h2>
-            <div style="display: flex; gap: 10px;">
-                <%= button_to "🔄 Sync Datadog Errors", dashboard_sync_datadog_errors_path, method: :post,
-                    class: "btn btn-primary",
-                    style: "padding: 10px 20px; background: #632CA6; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 8px rgba(99, 44, 166, 0.3);",
-                    data: { turbo: false } %>
-                <% if @projects.any? %>
-                    <%= button_to "🤖 Create PRs with AI", create_prs_project_path(@projects.first), method: :post,
-                        class: "btn btn-success",
-                        style: "padding: 10px 20px; background: #28A745; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);",
-                        data: { turbo: false, confirm: 'This will create AI-generated PRs for up to 5 open incidents. Continue?' } %>
-                <% end %>
-            </div>
         </div>
 
         <!-- Filters and Search -->
